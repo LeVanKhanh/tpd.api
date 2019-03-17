@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility\Tpd.Api.Utility.Linq\Tpd.Api.Utility.Linq.csproj" />
+    <ProjectReference Include="..\Tpd.Api.Core.DataAccess\Tpd.Api.Core.DataAccess.csproj" />
+    <ProjectReference Include="..\Tpd.Api.Core.Share\Tpd.Api.Core.Share.csproj" />
+  </ItemGroup>
+
+</Project>
