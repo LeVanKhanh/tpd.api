@@ -8,7 +8,5 @@ namespace Tpd.Api.Example.DataAccess.UnitOfWork
         RpstMasterData MasterData { get; }
 
         RpstMasterDataCategory MasterDataCategory { get; }
-
-        RpstBleSignal BleSignal { get; }
     }
 }

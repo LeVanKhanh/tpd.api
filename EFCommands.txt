@@ -1,0 +1,2 @@
+Add-Migration -Name "tpd" -StartupProject "Tpd.Api.Example.Interface" -Project "Tpd.Api.Example.Database"
+Update-Database -StartupProject "Tpd.Api.Example.Interface" -Project "Tpd.Api.Example.Database"

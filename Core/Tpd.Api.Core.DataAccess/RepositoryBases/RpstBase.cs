@@ -1,20 +1,20 @@
-﻿using Tpd.Api.Core.Database;
-using Tpd.Api.Core.DataTransferObject;
+﻿using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tpd.Api.Core.Database;
+using Tpd.Api.Core.DataTransferObject;
 
 namespace Tpd.Api.Core.DataAccess
 {
-    public class RpstBase<T, TDbContext> : IRpstBase<T>
+    public class RpstBase<T> : IRpstBase<T>
         where T : DtoBase
-        where TDbContext : DatabaseContextBase
     {
         protected DbSet<T> Dbset;
-        private TDbContext _dataContext;
+        private DatabaseContextBase _dataContext;
 
-        public RpstBase(TDbContext dataContext)
+        public RpstBase(DatabaseContextBase dataContext)
         {
             _dataContext = dataContext;
             Dbset = dataContext.Set<T>();
@@ -30,12 +30,22 @@ namespace Tpd.Api.Core.DataAccess
             Dbset.Add(entity);
         }
 
-        public void BulkAdd(RequestContext context, IEnumerable<T> entity)
+        public async void AddAsync(RequestContext context, T entity)
+        {
+            var currentDateTime = DateTime.Now;
+            //entity.CreatedAt = currentDateTime;
+            //entity.UpdatedAt = currentDateTime;
+            //entity.CreatedBy = context.UserId;
+            //entity.UpdatedBy = context.UserId;
+            await Dbset.AddAsync(entity);
+        }
+
+        public void BulkAdd(RequestContext context, IList<T> entity)
         {
             _dataContext.BulkInsert(entity);
         }
 
-        public async void BulkAddAsync(IEnumerable<T> entity)
+        public async void BulkAddAsync(RequestContext context, IList<T> entity)
         {
             await _dataContext.BulkInsertAsync(entity);
         }

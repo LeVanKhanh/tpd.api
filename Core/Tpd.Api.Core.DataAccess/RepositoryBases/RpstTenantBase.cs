@@ -5,11 +5,10 @@ using System.Linq;
 
 namespace Tpd.Api.Core.DataAccess
 {
-    public class RpstTenantBase<T, TDbContext> : RpstBase<T, TDbContext>, IRpstTenantBase<T>
+    public class RpstTenantBase<T> : RpstBase<T>, IRpstTenantBase<T>
          where T : DtoTenantBase
-         where TDbContext : DatabaseContextBase
     {
-        public RpstTenantBase(TDbContext dataContext)
+        public RpstTenantBase(DatabaseContextBase dataContext)
             : base(dataContext)
         {
 

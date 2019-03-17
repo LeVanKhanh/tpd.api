@@ -8,8 +8,9 @@ namespace Tpd.Api.Core.DataAccess
         where T : class
     {
         void Add(RequestContext context, T entity);
-        void BulkAdd(RequestContext context, IEnumerable<T> entity);
-        void BulkAddAsync(IEnumerable<T> entity);
+        void AddAsync(RequestContext context, T entity);
+        void BulkAdd(RequestContext context, IList<T> entity);
+        void BulkAddAsync(RequestContext context, IList<T> entity);
         void Update(RequestContext context, T entity);
         void Delete(RequestContext context, T entity);
         T GetById(Guid id, bool isCheckDeleted = true);

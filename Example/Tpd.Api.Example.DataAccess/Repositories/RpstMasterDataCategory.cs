@@ -1,12 +1,12 @@
 ﻿using Tpd.Api.Core.DataAccess;
-using Tpd.Api.Core.Database;
+using Tpd.Api.Database.Context;
 using Tpd.Api.Database.Entities;
 
 namespace Tpd.Api.Example.DataAccess.Repositories
 {
-    public class RpstMasterDataCategory : RpstBase<EttMasterDataCategory, DatabaseContextBase>
+    public class RpstMasterDataCategory : RpstBase<EttMasterDataCategory>
     {
-        public RpstMasterDataCategory(DatabaseContextBase dataContext)
+        public RpstMasterDataCategory(DatabaseContext dataContext)
            : base(dataContext)
         {
 

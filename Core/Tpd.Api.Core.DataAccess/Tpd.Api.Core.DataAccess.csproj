@@ -12,9 +12,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EFCore.BulkExtensions" Version="2.4.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="2.1.46" />
   </ItemGroup>
 
   <ItemGroup>

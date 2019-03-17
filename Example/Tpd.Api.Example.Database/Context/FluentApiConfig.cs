@@ -19,12 +19,5 @@ namespace Tpd.Api.Database.Context
             builder.Property(p => p.Name).IsRequired().HasMaxLength(200);
             builder.Property(p => p.Description).HasMaxLength(1000);
         }
-
-        public void ConfigureTenantMasterData(EntityTypeBuilder<EttTenantMasterData> builder)
-        {
-            builder.Property(p => p.MasterDataId).IsRequired();
-            builder.Property(p => p.TenantId).IsRequired();
-            builder.HasOne(p => p.MasterData).WithMany().HasForeignKey(f => f.MasterDataId);
-        }
     }
 }
