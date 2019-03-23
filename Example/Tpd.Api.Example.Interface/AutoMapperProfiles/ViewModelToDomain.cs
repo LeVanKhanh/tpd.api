@@ -8,6 +8,11 @@ namespace Tpd.Api.Interface.AutoMapperProfiles
 {
     public class ViewModelToDomain: Profile
     {
+        /// <summary>
+        ///  Configure Auto Mapping
+        ///  Source: View Model/ DTO
+        ///  Destination: Domain model/ Service Model/ DTO
+        /// </summary>
         public ViewModelToDomain()
         {
             CreateMap<MasterDataCategoryUpdateModel, DtoMasterDataCategory>();

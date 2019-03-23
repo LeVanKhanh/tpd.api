@@ -1,13 +1,13 @@
 ﻿using Tpd.Api.Core.Service.RequestBases.CommandBases;
-using Tpd.Api.Core.Service.CommandResultBases;
 using System.Threading.Tasks;
-
+using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
-    public interface ICommandAsyncHandlerBase<in TCommand, TResultType>
+    public interface ICommandAsyncHandlerBase<TCommand>
         where TCommand : ICommandBase
     {
-        Task<ICommandResultBase<TResultType>> Execute(TCommand command);
+        // Base function for execute a command
+        Task<IResultBase<int>> HandleAsync(TCommand command);
     }
 }

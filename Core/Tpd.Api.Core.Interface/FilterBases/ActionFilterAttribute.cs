@@ -6,6 +6,10 @@ namespace Tpd.Api.Core.Interface
 {
     public class ActionFilterAttribute : IActionFilter
     {
+        /// <summary>
+        /// The function for valivdating model of each action
+        /// </summary>
+        /// <param name="filterContext"></param>
         public void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (!filterContext.ModelState.IsValid)
@@ -13,6 +17,7 @@ namespace Tpd.Api.Core.Interface
                 var messages = filterContext.ModelState.Values.SelectMany(state => state.Errors)
                    .Select(s => s.ErrorMessage).ToList();
 
+                //Return custome data
                 var result = new JsonResult(new ResponseModelBase
                 {
                     Success = false,

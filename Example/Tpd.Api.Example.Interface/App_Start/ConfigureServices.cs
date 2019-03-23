@@ -7,6 +7,10 @@ namespace Tpd.Api.Interface.App_Start
 {
     public static class ConfigureServices
     {
+        /// <summary>
+        /// Configure Dependency Injection
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddDependencyInjection(this IServiceCollection services)
         {
             services.AddDependencyInjection(typeof(Example.Service.Service));

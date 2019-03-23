@@ -55,7 +55,7 @@ namespace Tpd.Api.Interface.Helper
             string signal = JsonConvert.SerializeObject(dashBoardModel);
             var model = new DtoDashboardMessage { Message = signal };
 
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", model.Message);
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", model.Message);
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

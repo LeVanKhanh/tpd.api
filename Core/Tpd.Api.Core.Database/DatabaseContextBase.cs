@@ -2,6 +2,9 @@
 
 namespace Tpd.Api.Core.Database
 {
+    /// <summary>
+    /// The class for DatabaseContext configuration
+    /// </summary>
     public class DatabaseContextBase : DbContext
     {
         private readonly string _connectionStringName;
@@ -15,11 +18,6 @@ namespace Tpd.Api.Core.Database
         {
             string connstr = ConnectionStringSettings.GetConnectionString(_connectionStringName);
             optionsBuilder.UseSqlServer(connstr);
-        }
-
-        public void Commit()
-        {
-            SaveChanges();
         }
     }
 }

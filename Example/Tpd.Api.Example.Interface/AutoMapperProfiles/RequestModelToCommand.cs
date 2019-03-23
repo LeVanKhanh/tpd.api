@@ -9,6 +9,11 @@ namespace Tpd.Api.Interface.AutoMapperProfiles
 {
     public class RequestModelToCommand:Profile
     {
+        /// <summary>
+        /// Configure Auto Mapping
+        /// Source: Request Model
+        /// Destination: Command/ Query
+        /// </summary>
         public RequestModelToCommand()
         {
             CreateMap<RequestModelBase<MasterDataCategoryCreateModel>, MasterDataCategoryCreateCommand>();

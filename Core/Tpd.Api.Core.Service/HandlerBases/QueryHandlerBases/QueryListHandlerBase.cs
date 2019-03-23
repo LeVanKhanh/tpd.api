@@ -1,58 +1,58 @@
-﻿using Tpd.Api.Core.DataAccess;
-using Tpd.Api.Core.Service.RequestBases.QueryBases;
-using Tpd.Api.Core.Service.QueryResultBases;
-using Tpd.Api.Utility.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Tpd.Api.Core.DataAccess;
+using Tpd.Api.Core.Service.RequestBases.QueryBases;
+using Tpd.Api.Core.Service.ResultBases;
+using Tpd.Api.Utility.Linq;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
-    public abstract class QueryListHandlerBase<TQuery, TResultType> : QueryCollectionHandlerBase<TQuery, List<TResultType>>,
+    public abstract class QueryListHandlerBase<TQuery, TResultType> : QueryHandlerBase<TQuery, PagedResult<TResultType>>,
         IQueryListHandlerBase<TQuery, TResultType>
         where TQuery : IQueryListBase
     {
-        protected IQueryListResultBase<TResultType> CollectionResult;
-
         public QueryListHandlerBase(IUnitOfWorkBase unitOfWork)
             : base(unitOfWork)
         {
-            CollectionResult = new QueryListResultBase<TResultType>();
         }
 
-        public virtual IQueryListResultBase<TResultType> Query(TQuery query)
+        protected override IResultBase<PagedResult<TResultType>> Handle(TQuery query, RequestContext context)
         {
-            if (IsValidAll(query))
+            var result = new ResultBase<PagedResult<TResultType>>
             {
-                CollectionResult.Result = DoQuery(query);
+                Success = true
+            };
+
+            IQueryable<TResultType> queryable;
+            List<string> message;
+
+            if (!TryBuildQuery(query, out queryable, out message))
+            {
+                result.Success = false;
+                result.ErrorMessages = message;
+                return result;
             }
-            else
+
+            result.Result.TotalRow = queryable.Count();
+
+            if (!string.IsNullOrEmpty(query.OrderBy))
             {
-                CollectionResult.ErrorMessages = query.Messages;
-            }
-
-            return CollectionResult;
-        }
-
-        protected abstract IQueryable<TResultType> BuildQuery(TQuery query);
-
-        protected override List<TResultType> DoQuery(TQuery query)
-        {
-            var dataQuery = BuildQuery(query);
-
-            CollectionResult.TotalRow = dataQuery.Count();
-
-            if(!string.IsNullOrEmpty(query.OrderBy))
-            {
-                dataQuery = dataQuery.OrderBy(query.OrderBy, query.OrderByDirection);
+                queryable = queryable.OrderBy(query.OrderBy, query.OrderByDirection);
             }
 
             if (query.IsPaged)
             {
-                dataQuery = dataQuery.Skip(query.Skip).Take(query.Take);
+                result.Result.Skip = query.Skip;
+                result.Result.Take = query.Take;
+                queryable = queryable.Skip(query.Skip).Take(query.Take);
             }
 
-            CollectionResult.Success = true;
-            return dataQuery.ToList();
+            result.Success = true;
+            result.Result.Items = queryable.ToList();
+
+            return result;
         }
+
+        protected abstract bool TryBuildQuery(TQuery query, out IQueryable<TResultType> queryable, out List<string> message);
     }
 }

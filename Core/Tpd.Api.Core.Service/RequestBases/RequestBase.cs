@@ -1,5 +1,4 @@
-﻿using Tpd.Api.Core.Service.RequestBases;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Tpd.Api.Core.Service.RequestBases
 {

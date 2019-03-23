@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using Tpd.Api.Core.Interface;
+﻿using Tpd.Api.Core.Interface.ControllerBases;
 
-namespace Tpd.Api.Interface.Controllers
+namespace Tpd.Api.Example.Interface.Controllers
 {
     public class BaseController : CoreBaseController
     {
-        public BaseController(IMapper mapper)
-         : base(mapper)
-        {
-
-        }
     }
 }

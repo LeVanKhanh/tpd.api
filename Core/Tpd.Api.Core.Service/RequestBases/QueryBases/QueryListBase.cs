@@ -1,6 +1,6 @@
 ﻿namespace Tpd.Api.Core.Service.RequestBases.QueryBases
 {
-    public abstract class QueryListBase : QueryCollectionBase, IQueryListBase
+    public abstract class QueryListBase : QueryBase, IQueryListBase
     {
         public QueryListBase()
         {

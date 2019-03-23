@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.DataTransferObject;
 using Tpd.Api.Core.Service.RequestBases.CommandBases;
-using Tpd.Api.Core.Share;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
-    public abstract class CommandCreateHandlerBase<TCommand, TResultType> :
-        CommandHandlerBase<TCommand, TResultType>,
-        ICommandCreateHandlerBase<TCommand, TResultType>
-        where TCommand : ICommandBase
-        where TResultType : new()
+    public class CommandCreateHandlerBase<TCommand, TEntity, TDto> :
+        CommandHandlerBase<TCommand>,
+        ICommandCreateHandlerBase<TCommand, TDto>
+        where TCommand : ICommandCreateBase<TDto>
+        where TEntity : DtoBase
+        where TDto : DtoBase
     {
         protected readonly IMapper Mapper;
         public CommandCreateHandlerBase(IUnitOfWorkBase unitOfWork, IMapper mapper)
@@ -19,29 +20,18 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
             Mapper = mapper;
         }
 
-        protected virtual bool DoCreate<TEntity, TModel>(ICommandCreateBase<TModel> command)
-            where TEntity : DtoBase
+        protected override bool TryBuildCommand(TCommand command, RequestContext Context, out List<string> messages)
         {
+            messages = new List<string>();
             var repository = UnitOfWork.Repository<TEntity>();
-            return DoCreate(command, repository);
+            var entity = CreateEntity(command);
+            repository.Add(Context, entity);
+            return true;
         }
 
-        protected virtual bool DoCreate<TEntity, TModel>(ICommandCreateBase<TModel> command, IRpstBase<TEntity> repository)
-            where TEntity : DtoBase
+        protected TEntity CreateEntity(TCommand command)
         {
-            TEntity entity;
-            try
-            {
-                entity = Mapper.Map<TEntity>(command.Model);
-                repository.Add(Context, entity);
-                return true;
-            }
-            catch
-            {
-                SericeResult.ErrorMessages.Add(Constants.CommonMessages.AUTO_MAPPING_DOMAIN_TO_DATA_FAILED);
-                SericeResult.Success = false;
-                return false;
-            }
+            return Mapper.Map<TEntity>(command.Model);
         }
     }
 }

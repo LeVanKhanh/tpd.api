@@ -22,9 +22,13 @@ namespace Tpd.Api.Interface
         {
             services.AddMvcOptions();
             services.AddAutoMapper();
+            //Implement Swagger
             services.AddSwagger(typeof(Startup));
+            //Config Dependency Injection
             services.AddDependencyInjection();
+            //Implement Elmah
             services.AddElmahOptions();
+            // Implement SignalR
             services.AddSignalR();
 
             //services.AddHostedService<TimerSendCounted>();
@@ -42,13 +46,18 @@ namespace Tpd.Api.Interface
                 app.UseHsts();
             }
 
+            //Implement Elmah
             app.UseElmah();
+            // Implement Catch Global Exception
             app.UseGlobalException();
             app.UseStaticFiles();
+            //Implement Swagger
             app.UseSwagger();
             app.UseHttpsRedirection();
             app.UseMvc();
+            // Configure Cors Origins
             app.UseCorsOrigins();
+            // Implement SignalR
             app.UseSignalR();
         }
     }

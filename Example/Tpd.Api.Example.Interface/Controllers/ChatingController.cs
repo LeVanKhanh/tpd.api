@@ -1,27 +1,28 @@
-﻿using AutoMapper;
-using Tpd.Api.DataTransferObject;
-using Tpd.Api.Interface.Hubs;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
+using Tpd.Api.DataTransferObject;
+using Tpd.Api.Interface.Hubs;
 
-namespace Tpd.Api.Interface.Controllers
+namespace Tpd.Api.Example.Interface.Controllers
 {
+    /// <summary>
+    /// Api for accessing signalR hub
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class ChatingController : BaseController
     {
         private readonly IHubContext<ChatHub> _hubContext;
 
-        public ChatingController(IMapper mapper, IHubContext<ChatHub> hubContext) :
-            base(mapper)
+        public ChatingController(IHubContext<ChatHub> hubContext)
         {
             _hubContext = hubContext;
         }
 
         [HttpPost]
-        public async Task<bool> SendMessage(string name, string message)
+        public async Task<bool> SendMessage(string message)
         {
             await _hubContext.Clients.All.SendAsync("ReceiveMessage", message);
             return true;

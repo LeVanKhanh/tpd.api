@@ -1,87 +1,64 @@
-﻿using Tpd.Api.Core.DataAccess;
-using Tpd.Api.Core.Service.RequestBases.CommandBases;
-using Tpd.Api.Core.Service.CommandResultBases;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using Tpd.Api.Core.DataAccess;
+using Tpd.Api.Core.Service.RequestBases.CommandBases;
+using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
-    public abstract class CommandHandlerBase<TCommand, TResultType> : ICommandHandlerBase<TCommand, TResultType>
+    /// <summary>
+    /// The class for executing a command
+    /// </summary>
+    /// <typeparam name="TCommand">Type Of Command Object</typeparam>
+    public abstract class CommandHandlerBase<TCommand> : HandlerBase<TCommand, int>,
+        ICommandHandlerBase<TCommand>
         where TCommand : ICommandBase
-        where TResultType : new()
     {
-        protected readonly IUnitOfWorkBase UnitOfWork;
-        protected ICommandResultBase<TResultType> SericeResult;
-        protected RequestContext Context;
-
         public CommandHandlerBase(IUnitOfWorkBase unitOfWork)
+            : base(unitOfWork)
         {
-            UnitOfWork = unitOfWork;
-            SericeResult = new CommandResultBase<TResultType>();
-            Context = new RequestContext();
+
         }
 
-        public virtual ICommandResultBase<TResultType> Execute(TCommand command)
+        protected sealed override IResultBase<int> Handle(TCommand command, RequestContext Context)
         {
-            Context = new RequestContext
+            List<string> message;
+            if (TryBuildCommand(command, Context, out message))
             {
-                TenantId = command.Context.TenantId,
-                UserId = command.Context.UserId
-            };
-
-            if (IsValidAll(command))
-            {
-                if (DoWork(command))
+                int result = Commit();
+                return new ResultBase<int>
                 {
-                    Commit();
-                }
+                    Success = true,
+                    Result = result
+                };
             }
             else
             {
-                SericeResult.ErrorMessages = command.Messages;
+                return new ResultBase<int>
+                {
+                    Success = true,
+                    ErrorMessages = message
+                };
             }
-
-            return SericeResult;
         }
 
-        private bool IsValidAll(TCommand command)
-        {
-            if (!command.IsValid())
-            {
-                return false;
-            }
-
-            return IsValid(command);
-        }
-
-        protected virtual void Commit()
+        /// <summary>
+        /// Function for try commit change(s)
+        /// </summary>
+        private int Commit()
         {
             try
             {
-                UnitOfWork.Commit();
-                SericeResult.Success = true;
+                return UnitOfWork.Commit();
             }
             catch (DbUpdateException dbEx)
             {
-                SericeResult.Success = false;
-                SericeResult.ErrorMessages.Add(dbEx.InnerException.Message);
-            }
-            catch (Exception ex)
-            {
-                SericeResult.Success = false;
-                SericeResult.ErrorMessages.Add(ex.Message);
-            }
-            finally
-            {
-                //UnitOfWork.Dispose();
+                throw new Exception(dbEx.InnerException.Message);
             }
         }
 
-        protected virtual bool IsValid(TCommand command)
-        {
-            return true;
-        }
-
-        protected abstract bool DoWork(TCommand command);
+        // Function for implemment bussines before commit change
+        protected abstract bool TryBuildCommand(TCommand command, RequestContext Context, out List<string> messages);
     }
 }

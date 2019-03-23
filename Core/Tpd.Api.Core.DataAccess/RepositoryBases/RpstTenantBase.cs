@@ -1,7 +1,6 @@
-﻿using Tpd.Api.Core.Database;
+﻿using System.Linq;
+using Tpd.Api.Core.Database;
 using Tpd.Api.Core.DataTransferObject;
-using System;
-using System.Linq;
 
 namespace Tpd.Api.Core.DataAccess
 {
@@ -14,18 +13,41 @@ namespace Tpd.Api.Core.DataAccess
 
         }
 
-        public void AddByTeant(RequestContext context, Guid TenantId, T entity)
+        /// <summary>
+        /// Add an entity
+        /// </summary>
+        /// <param name="context">Current context</param>
+        /// <param name="entity">Entity Data</param>
+        public override void Add(RequestContext context, T entity)
         {
-            entity.TenantId = Guid.NewGuid();
+            entity.TenantId = context.TenantId;
             Add(context, entity);
         }
 
-        public IQueryable<T> GetQueryByTenant(Guid tenantId, bool isCheckDeleted = true)
+        /// <summary>
+        ///  Add an entity Async
+        /// </summary>
+        /// <param name="context">Current context</param>
+        /// <param name="entity">Entity Data</param>
+        public override void AddAsync(RequestContext context, T entity)
         {
-            var query = Dbset.Where(w => w.TenantId == tenantId);
+            entity.TenantId = context.TenantId;
+            AddAsync(context, entity);
+        }
+
+        /// <summary>
+        /// Get query for current entity
+        /// </summary>
+        /// <param name="context">Current context</param>
+        /// <param name="isCheckDeleted">Get items were marked deleted or not</param>
+        /// <returns></returns>
+        public IQueryable<T> GetQuery(RequestContext context, bool isCheckDeleted = true)
+        {
+            var query = Dbset.Where(w => w.TenantId == context.TenantId);
+
             if (isCheckDeleted)
             {
-                //return Dbset.Where(w => !w.IsDeleted);
+                return Dbset.Where(w => !w.IsDeleted);
             }
 
             return query;

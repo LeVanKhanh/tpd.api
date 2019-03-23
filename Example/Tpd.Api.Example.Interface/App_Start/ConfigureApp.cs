@@ -5,6 +5,10 @@ namespace Tpd.Api.Interface.App_Start
 {
     public static class ConfigureApp
     {
+        /// <summary>
+        /// Configure Cors Origins
+        /// </summary>
+        /// <param name="app"></param>
         public static void UseCorsOrigins(this IApplicationBuilder app)
         {
             app.UseCors(builder =>
@@ -19,6 +23,10 @@ namespace Tpd.Api.Interface.App_Start
             });
         }
 
+        /// <summary>
+        /// Register SignalR Hub(s)
+        /// </summary>
+        /// <param name="app"></param>
         public static void UseSignalR(this IApplicationBuilder app)
         {
             app.UseSignalR(routes =>

@@ -1,6 +1,8 @@
-﻿using Tpd.Api.Core.DataAccess;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;
-using Tpd.Api.Core.Service.QueryResultBases;
+using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
@@ -9,27 +11,34 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         where TQuery : IQuerySingleBase
         where TResultType : new()
     {
-        protected IQuerySingleResultBase<TResultType> SingleResult;
-
         public QuerySingleHandlerBase(IUnitOfWorkBase unitOfWork)
             : base(unitOfWork)
         {
-            SingleResult = new QuerySingleResultBase<TResultType>();
+
         }
 
-        public virtual IQuerySingleResultBase<TResultType> Query(TQuery query)
+        protected override IResultBase<TResultType> Handle(TQuery query, RequestContext context)
         {
-            if (IsValidAll(query))
+            var result = new ResultBase<TResultType>
             {
-                SingleResult.Result = DoQuery(query);
-                SingleResult.Success = true;
-            }
-            else
+                Success = true
+            };
+
+            IQueryable<TResultType> queryable;
+            List<string> message;
+
+            if (!TryBuildQuery(query, context, out queryable, out message))
             {
-                SingleResult.ErrorMessages = query.Messages;
+                result.Success = false;
+                result.ErrorMessages = message;
+                return result;
             }
 
-            return SingleResult;
+            result.Result = queryable.FirstOrDefault();
+
+            return result;
         }
+
+        protected abstract bool TryBuildQuery(TQuery query, RequestContext context, out IQueryable<TResultType> queryable, out List<string> message);
     }
 }

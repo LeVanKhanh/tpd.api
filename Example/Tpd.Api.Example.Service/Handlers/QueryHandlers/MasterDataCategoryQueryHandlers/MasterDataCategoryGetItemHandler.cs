@@ -1,4 +1,7 @@
-﻿using Tpd.Api.Example.DataAccess.UnitOfWork;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Tpd.Api.Core.DataAccess;
+using Tpd.Api.Example.DataAccess.UnitOfWork;
 using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties;
 using Tpd.Api.Example.Service.ServiceResultModels;
 
@@ -12,16 +15,23 @@ namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQuery
 
         }
 
-        protected override SrmMasterDataCategory DoQuery(MasterDataCategoryGetItemQuery query)
+        protected override bool TryBuildQuery(MasterDataCategoryGetItemQuery query, RequestContext context,
+            out IQueryable<SrmMasterDataCategory> queryable, out List<string> message)
         {
-            var entity = UnitOfWork.MasterDataCategory.GetById(query.Id);
-            var result = new SrmMasterDataCategory
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Description = entity.Description
-            };
-            return result;
+            queryable = UnitOfWork.MasterDataCategory.GetQuery()
+                .Where(w => w.Id == query.Id)
+                .Select(s => new SrmMasterDataCategory
+                {
+                    Description = s.Description,
+                    CreatedAt = s.CreatedAt,
+                    Name = s.Name,
+                    Id = s.Id,
+                    IsDeleted = s.IsDeleted,
+                    UpdatedAt = s.UpdatedAt
+                });
+
+            message = new List<string>();
+            return true;
         }
     }
 }

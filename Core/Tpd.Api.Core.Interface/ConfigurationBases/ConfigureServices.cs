@@ -21,6 +21,11 @@ namespace Tpd.Api.Core.Interface
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
+        /// <summary>
+        /// The function for Swagger configuration
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="type">Type of running project</param>
         public static void AddSwagger(this IServiceCollection services, Type type)
         {
             services.AddSwaggerGen(c =>
@@ -51,6 +56,11 @@ namespace Tpd.Api.Core.Interface
             });
         }
 
+
+        /// <summary>
+        /// The function for Elmah configuration
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddElmahOptions(this IServiceCollection services)
         {
             string path = Path.Combine(AppContext.BaseDirectory, "logs");
@@ -61,10 +71,17 @@ namespace Tpd.Api.Core.Interface
             });
         }
 
+        /// <summary>
+        /// The function for Dependency Injection configuartion
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="type">Type of Service Project</param>
         public static void AddDependencyInjection(this IServiceCollection services, Type type)
         {
+            //Get Get Assembly of service project
             var assemblyToScan = Assembly.GetAssembly(type); //..or whatever assembly you need
 
+            //Config services injection
             services.RegisterAssemblyPublicNonGenericClasses(assemblyToScan)
               .Where(c => c.Name.EndsWith("Handler"))
               .AsPublicImplementedInterfaces();

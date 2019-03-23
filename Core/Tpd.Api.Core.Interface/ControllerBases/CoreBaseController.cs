@@ -1,369 +1,326 @@
-﻿using AutoMapper;
-using Tpd.Api.Core.Service.RequestBases.CommandBases;
-using Tpd.Api.Core.Service.RequestBases.QueryBases;
-using Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases;
-using Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases;
+using Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases;
+using Tpd.Api.Core.Service.RequestBases.CommandBases;
+using Tpd.Api.Core.Service.RequestBases.QueryBases;
 
-namespace Tpd.Api.Core.Interface
+namespace Tpd.Api.Core.Interface.ControllerBases
 {
-    public class CoreBaseController : ControllerBase
+    /// <summary>
+    /// The Abstract controller provide base methods to call services
+    /// </summary>
+    public abstract class CoreBaseController : ControllerBase
     {
-        protected readonly IMapper Mapper;
+        protected static ResponseModelBase SERVICE_NOT_FOUND { get; private set; }
 
-        private const string SERVICE_NOT_FOUND = "Service not found!";
-
-        public CoreBaseController(IMapper mapper)
+        public CoreBaseController()
         {
-            Mapper = mapper;
-        }
-
-        protected ResponseModelBase DoCommand<TCommand, TCommandResult>(TCommand command)
-            where TCommand : ICommandBase
-        {
-            var service = HttpContext.RequestServices.GetService<ICommandHandlerBase<TCommand, TCommandResult>>();
-            var serviceResult = service.Execute(command);
-
-            if (serviceResult == null)
+            if (SERVICE_NOT_FOUND == null)
             {
-                return new ResponseModelBase
+                SERVICE_NOT_FOUND = new ResponseModelBase
                 {
                     Success = false,
                     Message = new List<string>
                     {
-                        SERVICE_NOT_FOUND
+                        "Service not found"
                     }
                 };
             }
+        }
 
-            if (!serviceResult.Success)
+        /// <summary>
+        /// Call Command Handler
+        /// </summary>
+        /// <typeparam name="TCommand">Type of Command Object</typeparam>
+        /// <param name="command">Command Object</param>
+        /// <returns>
+        /// Response Model contain service result model 
+        /// </returns>
+        protected ResponseModelBase DoCommand<TCommand>(TCommand command)
+            where TCommand : ICommandBase
+        {
+            //Get command handler
+            var handler = HttpContext.RequestServices.GetService<ICommandHandlerBase<TCommand>>();
+
+            if (handler == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Execute command
+            var handlerResult = handler.Handle(command);
+
+            //The command handler return null
+            if (handlerResult == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Got handled error(s)
+            if (!handlerResult.Success)
             {
                 return new ResponseModelBase
                 {
                     Success = false,
-                    Message = serviceResult.ErrorMessages
+                    Message = handlerResult.ErrorMessages
                 };
             }
 
+            //Command was executed succeed
             return new ResponseModelBase
             {
                 Success = true,
                 Count = 1,
-                Data = serviceResult.Result
+                Data = handlerResult.Result
             };
         }
 
-        protected ActionResult<ResponseModelBase> DoCommand<TModel, TCommand, TResult>(RequestModelBase<TModel> model)
-            where TCommand : ICommandBase
-        {
-            TCommand command = Mapper.Map<TCommand>(model);
-            return DoCommand<TCommand, TResult>(command);
-        }
-
+        /// <summary>
+        /// Call Query Item Handler
+        /// </summary>
+        /// <typeparam name="TQuery">Type of Query Single Object.</typeparam>
+        /// <typeparam name="TQuerySingleResult">Type of Handler Result Object</typeparam>
+        /// <param name="query">Query Single Object</param>
+        /// <returns>
+        /// Response Model contain service result model.
+        /// The service result is not Collection Object.
+        /// </returns>
         protected ResponseModelBase DoQueryItem<TQuery, TQuerySingleResult>(TQuery query)
             where TQuery : IQuerySingleBase
         {
-            var service = HttpContext.RequestServices.GetService<IQuerySingleHandlerBase<TQuery, TQuerySingleResult>>();
-            var serviceResult = service.Query(query);
+            //Get query handler
+            var handler = HttpContext.RequestServices.GetService<IQuerySingleHandlerBase<TQuery, TQuerySingleResult>>();
 
-            if (serviceResult == null)
+            if (handler == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Query Data
+            var handlerResult = handler.Handle(query);
+
+            //If query handler return null
+            if (handlerResult == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Got handled error(s)
+            if (!handlerResult.Success)
             {
                 return new ResponseModelBase
                 {
                     Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
+                    Message = handlerResult.ErrorMessages
                 };
             }
 
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
+            //Queried succeed
             return new ResponseModelBase
             {
                 Success = true,
                 Count = 1,
-                Data = serviceResult.Result
+                Data = handlerResult.Result
             };
         }
 
-        protected ResponseModelBase DoQueryItem<TQuery, TQuerySingleResult, TViewModelResult>(TQuery query)
-            where TQuery : IQuerySingleBase
-        {
-
-            var queryResult = DoQueryItem<TQuery, TQuerySingleResult>(query);
-
-            if (!queryResult.Success)
-            {
-                return queryResult;
-            }
-
-            var dataResult = Mapper.Map<TViewModelResult>(queryResult.Data);
-
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = 1,
-                Data = dataResult
-            };
-        }
-
+        /// <summary>
+        /// Call Query List Handler
+        /// </summary>
+        /// <typeparam name="TQuery">Type of Query List Object</typeparam>
+        /// <typeparam name="TQueryListResult">Type Handler of Result Object</typeparam>
+        /// <param name="query">Query List Object</param>
+        /// <returns>
+        /// Response Model contain service result model.
+        /// The service result is List.
+        /// </returns>
         protected ResponseModelBase DoQueryList<TQuery, TQueryListResult>(TQuery query)
             where TQuery : IQueryListBase
         {
-            var service = HttpContext.RequestServices.GetService<IQueryListHandlerBase<TQuery, TQueryListResult>>();
-            var serviceResult = service.Query(query);
+            //Get query handler
+            var handler = HttpContext.RequestServices.GetService<IQueryListHandlerBase<TQuery, TQueryListResult>>();
 
-            if (serviceResult == null)
+            if (handler == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Query Data
+            var handlerResult = handler.Handle(query);
+
+            //If query handler return null
+            if (handlerResult == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Got handled error(s)
+            if (!handlerResult.Success)
             {
                 return new ResponseModelBase
                 {
                     Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
+                    Message = handlerResult.ErrorMessages
                 };
             }
 
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
+            //Queried succeed
             return new ResponseModelBase
             {
                 Success = true,
-                Count = serviceResult.TotalRow,
-                Data = serviceResult.Result
-            };
-
-        }
-
-        protected ResponseModelBase DoQueryList<TQuery, TQueryListResult, TViewModelResult>(TQuery query)
-            where TQuery : IQueryListBase
-        {
-            var service = HttpContext.RequestServices.GetService<IQueryListHandlerBase<TQuery, TQueryListResult>>();
-            var serviceResult = service.Query(query);
-
-            if (serviceResult == null)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
-                };
-            }
-
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
-            var dataResult = serviceResult.Result.Select(Mapper.Map<TQueryListResult, TViewModelResult>).ToList();
-
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = serviceResult.TotalRow,
-                Data = dataResult
+                Count = handlerResult.Result.TotalRow,
+                Data = handlerResult.Result
             };
         }
 
-        protected async Task<ResponseModelBase> DoCommandAsync<TCommand, TCommandResult>(TCommand command)
+        /// <summary>
+        /// Call Async Command Handler
+        /// </summary>
+        /// <typeparam name="TCommand">Type of Command Object</typeparam>
+        /// <param name="command">Command Object</param>
+        /// <returns>
+        /// Response Model contain service result model 
+        /// </returns>
+        protected async Task<ResponseModelBase> DoCommandAsync<TCommand>(TCommand command)
             where TCommand : ICommandBase
         {
-            var service = HttpContext.RequestServices.GetService<ICommandAsyncHandlerBase<TCommand, TCommandResult>>();
-            var serviceResult = await service.Execute(command);
+            //Get command handler
+            var handler = HttpContext.RequestServices.GetService<ICommandAsyncHandlerBase<TCommand>>();
 
-            if (serviceResult == null)
+            if (handler == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Execute command
+            var handlerResult = await handler.HandleAsync(command);
+
+            //The command handler return null
+            if (handlerResult == null)
+            {
+                return SERVICE_NOT_FOUND;
+            }
+
+            //Got handled error(s)
+            if (!handlerResult.Success)
             {
                 return new ResponseModelBase
                 {
                     Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
+                    Message = handlerResult.ErrorMessages
                 };
             }
 
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
+            //Command was executed succeed
             return new ResponseModelBase
             {
                 Success = true,
                 Count = 1,
-                Data = serviceResult.Result
+                Data = handlerResult.Result
             };
         }
 
-        protected async Task<ActionResult<ResponseModelBase>> DoCommandAsync<TModel, TCommand, TResult>(RequestModelBase<TModel> model)
-            where TCommand : ICommandBase
-        {
-            TCommand command = Mapper.Map<TCommand>(model);
-            return await DoCommandAsync<TCommand, TResult>(command);
-        }
+        /// <summary>
+        /// Call Async Query Item Handler
+        /// </summary>
+        /// <typeparam name="TQuery">Type of Query Single Object.</typeparam>
+        /// <typeparam name="TQuerySingleResult">Type of Handler Result Object</typeparam>
+        /// <param name="query">Query Single Object</param>
+        /// <returns>
+        /// Response Model contain service result model.
+        /// The service result is not Collection Object.
+        /// </returns>
+        //protected async Task<ResponseModelBase> DoQueryItemAsync<TQuery, TQuerySingleResult>(TQuery query)
+        //    where TQuery : IQuerySingleBase
+        //{
+        //    //Get query handler
+        //    var handler = HttpContext.RequestServices.GetService<IQuerySingleAsyncHandlerBase<TQuery, TQuerySingleResult>>();
 
-        protected async Task<ResponseModelBase> DoQueryItemAsync<TQuery, TQuerySingleResult>(TQuery query)
-            where TQuery : IQuerySingleBase
-        {
-            var service = HttpContext.RequestServices.GetService<IQuerySingleAsyncHandlerBase<TQuery, TQuerySingleResult>>();
-            var serviceResult = await service.Query(query);
+        //    if (handler == null)
+        //    {
+        //        return SERVICE_NOT_FOUND;
+        //    }
 
-            if (serviceResult == null)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
-                };
-            }
+        //    //Query Data
+        //    var handlerResult = await handler.Query(query);
 
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
+        //    //If query handler return null
+        //    if (handlerResult == null)
+        //    {
+        //        return SERVICE_NOT_FOUND;
+        //    }
 
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = 1,
-                Data = serviceResult.Result
-            };
-        }
+        //    //Got handled error(s)
+        //    if (!handlerResult.Success)
+        //    {
+        //        return new ResponseModelBase
+        //        {
+        //            Success = false,
+        //            Message = handlerResult.ErrorMessages
+        //        };
+        //    }
 
-        protected async Task<ResponseModelBase> DoQueryItemAsync<TQuery, TQuerySingleResult, TViewModelResult>(TQuery query)
-            where TQuery : IQuerySingleBase
-        {
+        //    //Queried succeed
+        //    return new ResponseModelBase
+        //    {
+        //        Success = true,
+        //        Count = 1,
+        //        Data = handlerResult.Result
+        //    };
+        //}
 
-            var queryResult = await DoQueryItemAsync<TQuery, TQuerySingleResult>(query);
+        /// <summary>
+        /// Call Async Query List Handler
+        /// </summary>
+        /// <typeparam name="TQuery">Type of Query List Object</typeparam>
+        /// <typeparam name="TQueryListResult">Type of Handler Result Object</typeparam>
+        /// <param name="query">Query List Object</param>
+        /// <returns>
+        /// Response Model contain service result model.
+        /// The service result is List.
+        /// </returns>
+        //protected async Task<ResponseModelBase> DoQueryListAsync<TQuery, TQueryListResult>(TQuery query)
+        //    where TQuery : IQueryListBase
+        //{
+        //    //Get query handler
+        //    var handler = HttpContext.RequestServices.GetService<IQueryListAsyncHandlerBase<TQuery, TQueryListResult>>();
 
-            if (!queryResult.Success)
-            {
-                return queryResult;
-            }
+        //    if (handler == null)
+        //    {
+        //        return SERVICE_NOT_FOUND;
+        //    }
 
-            var dataResult = Mapper.Map<TViewModelResult>(queryResult.Data);
+        //    //Query Data
+        //    var handlerResult = await handler.QueryAsync(query);
 
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = 1,
-                Data = dataResult
-            };
-        }
+        //    //If query handler return null
+        //    if (handlerResult == null)
+        //    {
+        //        return SERVICE_NOT_FOUND;
+        //    }
 
-        protected async Task<ResponseModelBase> DoQueryListAsync<TQuery, TQueryListResult>(TQuery query)
-            where TQuery : IQueryListBase
-        {
-            var service = HttpContext.RequestServices.GetService<IQueryListAsyncHandlerBase<TQuery, TQueryListResult>>();
-            var serviceResult = await service.Query(query);
+        //    //Got handled error(s)
+        //    if (!handlerResult.Success)
+        //    {
+        //        return new ResponseModelBase
+        //        {
+        //            Success = false,
+        //            Message = handlerResult.ErrorMessages
+        //        };
+        //    }
 
-            if (serviceResult == null)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
-                };
-            }
-
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = serviceResult.TotalRow,
-                Data = serviceResult.Result
-            };
-
-        }
-
-        protected async Task<ResponseModelBase> DoQueryListAsync<TQuery, TQueryListResult, TViewModelResult>(TQuery query)
-            where TQuery : IQueryListBase
-        {
-            var service = HttpContext.RequestServices.GetService<IQueryListAsyncHandlerBase<TQuery, TQueryListResult>>();
-            var serviceResult = await service.Query(query);
-
-            if (serviceResult == null)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = new List<string>
-                    {
-                        SERVICE_NOT_FOUND
-                    }
-                };
-            }
-
-            if (!serviceResult.Success)
-            {
-                return new ResponseModelBase
-                {
-                    Success = false,
-                    Message = serviceResult.ErrorMessages
-                };
-            }
-
-            var dataResult = serviceResult.Result.Select(Mapper.Map<TQueryListResult, TViewModelResult>).ToList();
-
-            return new ResponseModelBase
-            {
-                Success = true,
-                Count = serviceResult.TotalRow,
-                Data = dataResult
-            };
-        }
+        //    //Queried succeed
+        //    return new ResponseModelBase
+        //    {
+        //        Success = true,
+        //        Count = handlerResult.TotalRow,
+        //        Data = handlerResult.Result
+        //    };
+        //}
 
     }
 }

@@ -3,8 +3,7 @@ using System;
 
 namespace Tpd.Api.Example.Service.Requests.Commands.MasterDataCategoryCommands
 {
-    public class MasterDataCategoryDeleteCommand: CommandBase
+    public class MasterDataCategoryDeleteCommand: CommandDeleteBase
     {
-        public Guid Model { get; set; }
     }
 }

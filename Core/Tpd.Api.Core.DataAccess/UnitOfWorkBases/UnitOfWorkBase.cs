@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tpd.Api.Core.Database;
 using Tpd.Api.Core.DataTransferObject;
 
@@ -15,16 +16,29 @@ namespace Tpd.Api.Core.DataAccess
             Repositories = new Dictionary<string, object>();
         }
 
-        public void Commit()
+        /// <summary>
+        /// Commit change
+        /// </summary>
+        public int Commit()
         {
-            DataContext.SaveChanges();
+           return DataContext.SaveChanges();
         }
 
-        public async void CommitAsync()
+        /// <summary>
+        /// Commit change async
+        /// </summary>
+        public async Task<int> CommitAsync()
         {
-            await DataContext.SaveChangesAsync();
+           return await DataContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// The function for getting Repository by type of Entity
+        /// </summary>
+        /// <typeparam name="TEntity">Type of Entity</typeparam>
+        /// <returns>
+        /// Repository Base
+        /// </returns>
         public virtual IRpstBase<TEntity> Repository<TEntity>()
             where TEntity : DtoBase
         {

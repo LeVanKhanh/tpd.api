@@ -1,11 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Tpd.Api.Core.DataAccess
 {
     public interface IRpstTenantBase<T> : IRpstBase<T> 
         where T : class
     {
-        IQueryable<T> GetQueryByTenant(Guid tenantId, bool isCheckDeleted = true);
+        /// <summary>
+        /// Get query for current entity
+        /// </summary>
+        IQueryable<T> GetQuery(RequestContext context, bool isCheckDeleted = true);
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Tpd.Api.Core.Service.RequestBases.QueryBases;
-using Tpd.Api.Core.Service.QueryResultBases;
-using System.Collections.Generic;
+using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
-    public interface IQueryListHandlerBase<in TQuery, TResultType> : IQueryCollectionHandlerBase<TQuery, List<TResultType>>
-        where TQuery : IQueryCollectionBase
+    public interface IQueryListHandlerBase<TQuery, TResultType> : IQueryHandlerBase<TQuery, PagedResult<TResultType>>
+        where TQuery : IQueryListBase
     {
-        IQueryListResultBase<TResultType> Query(TQuery query);
     }
 }

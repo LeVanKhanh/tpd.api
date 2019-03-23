@@ -6,12 +6,24 @@ using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties;
 using Tpd.Api.Example.Service.ServiceResultModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Tpd.Api.DataTransferObject;
 
-namespace Tpd.Api.Interface.Controllers
+namespace Tpd.Api.Example.Interface.Controllers
 {
+    /// <summary>
+    /// Api for Master Data Category management
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class MasterDataCategoryController : BaseController
+    public class MasterDataCategoryController : BaseCrudController<
+        DtoMasterDataCategory,
+        MasterDataCategoryViewModel,
+        MasterDataCategoryViewModel,
+        MasterDataCategoryViewModel,
+        MasterDataCategoryCreateModel,
+        MasterDataCategoryCreateCommand,
+        MasterDataCategoryUpdateModel,
+        MasterDataCategoryUpdateCommand>
     {
         public MasterDataCategoryController(IMapper mapper)
             : base(mapper)
@@ -19,28 +31,28 @@ namespace Tpd.Api.Interface.Controllers
 
         }
 
-        [HttpPut]
-        public ActionResult<ResponseModelBase> Create(RequestModelBase<MasterDataCategoryCreateModel> model)
-        {
-            return DoCommand<MasterDataCategoryCreateModel, MasterDataCategoryCreateCommand, bool>(model);
-        }
-
-        [HttpPost]
-        public ActionResult<ResponseModelBase> Update(RequestModelBase<MasterDataCategoryUpdateModel> model)
-        {
-            return DoCommand<MasterDataCategoryUpdateModel, MasterDataCategoryUpdateCommand, bool>(model);
-        }
-
+        /// <summary>
+        /// Delete A Master Data Category
+        /// </summary>
+        /// <param name="model">Request Model with Master Data Category Id</param>
+        /// <returns></returns>
         [HttpDelete]
         public ActionResult<ResponseModelBase> Delete(RequestModelBase<Guid> model)
         {
-            return DoCommand<Guid, MasterDataCategoryDeleteCommand, bool>(model);
+            //Call base function
+            return DoCommand<Guid, MasterDataCategoryDeleteCommand>(model);
         }
 
+        /// <summary>
+        /// Get A Master Data Category
+        /// </summary>
+        /// <param name="id">Category Id</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
         public ActionResult<ResponseModelBase> GetItem(Guid id)
         {
+            // Create a query object
             var query = new MasterDataCategoryGetItemQuery
             {
                 Id = id
@@ -51,9 +63,19 @@ namespace Tpd.Api.Interface.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Get List Of Master Data Category
+        /// </summary>
+        /// <param name="name">Category Name</param>
+        /// <param name="description">Category description</param>
+        /// <param name="skip">Bypasses a specified number of elements in a sequence 
+        /// and then returns the remainingelements.</param>
+        /// <param name="take">Returns a specified number of contiguous elements from the start of a sequence.</param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<ResponseModelBase> GetList(string name, string description, int skip, int take)
         {
+            // Create a query object
             var query = new MasterDataCategoryGetListQuery
             {
                 Name = name,

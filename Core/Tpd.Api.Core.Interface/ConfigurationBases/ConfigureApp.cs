@@ -8,6 +8,10 @@ namespace Tpd.Api.Core.Interface
 {
     public static class ConfigureApp
     {
+        /// <summary>
+        /// The function for catch all exception
+        /// </summary>
+        /// <param name="app"></param>
         public static void UseGlobalException(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(config =>
@@ -20,7 +24,7 @@ namespace Tpd.Api.Core.Interface
                     var error = context.Features.Get<IExceptionHandlerFeature>();
                     if (error != null)
                     {
-                        //Write to log file
+                        //Write to log file (Elmah)
                         context.RiseError(error.Error);
 
                         var message = error.Error.Message;
@@ -34,12 +38,17 @@ namespace Tpd.Api.Core.Interface
                             }
                         };
 
+                        // Return custome
                         context.Response.WriteJson(result);
                     }
                 });
             });
         }
 
+        /// <summary>
+        /// The function for Swagger configuration
+        /// </summary>
+        /// <param name="app"></param>
         public static void UseSwagger(this IApplicationBuilder app)
         {
             SwaggerBuilderExtensions.UseSwagger(app);

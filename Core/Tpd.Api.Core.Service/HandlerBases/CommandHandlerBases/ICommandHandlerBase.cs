@@ -1,11 +1,12 @@
 ﻿using Tpd.Api.Core.Service.RequestBases.CommandBases;
-using Tpd.Api.Core.Service.CommandResultBases;
+using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
-    public interface ICommandHandlerBase<in TCommand, TResultType>
+    public interface ICommandHandlerBase<TCommand>
         where TCommand : ICommandBase
     {
-        ICommandResultBase<TResultType> Execute(TCommand command);
+        // Base function for execute a command
+        IResultBase<int> Handle(TCommand command);
     }
 }

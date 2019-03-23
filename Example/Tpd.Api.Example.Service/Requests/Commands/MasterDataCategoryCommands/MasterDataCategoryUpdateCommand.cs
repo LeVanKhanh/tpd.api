@@ -3,8 +3,7 @@ using Tpd.Api.DataTransferObject;
 
 namespace Tpd.Api.Example.Service.Requests.Commands.MasterDataCategoryCommands
 {
-    public class MasterDataCategoryUpdateCommand: CommandBase
+    public class MasterDataCategoryUpdateCommand : CommandUpdateBase<DtoMasterDataCategory>
     {
-        public DtoMasterDataCategory Model { get; set; }
     }
 }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Tpd.Api.Core.Database
 {
+    /// <summary>
+    /// The class for getting and storing all connectionstrings
+    /// </summary>
     public static class ConnectionStringSettings
     {
         private static Dictionary<string, string> ConnectionStrings { get; set; }

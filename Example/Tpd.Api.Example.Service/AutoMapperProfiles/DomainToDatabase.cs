@@ -8,7 +8,11 @@ namespace Tpd.Api.Example.Service.AutoMapperProfiles
     {
         public DomainToDatabase()
         {
-            CreateMap<DtoMasterDataCategory, EttMasterDataCategory>();
+            CreateMap<DtoMasterDataCategory, EttMasterDataCategory>()
+                .ForMember(f => f.CreatedAt, m => m.Ignore())
+                .ForMember(f => f.UpdatedAt, m => m.Ignore())
+                .ForMember(f => f.IsDeleted, m => m.Ignore())
+                .ForMember(f => f.Id, m => m.Ignore());
         }
     }
 }
