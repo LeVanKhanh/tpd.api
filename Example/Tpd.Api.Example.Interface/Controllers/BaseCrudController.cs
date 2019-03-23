@@ -5,24 +5,11 @@ using Tpd.Api.Core.Service.RequestBases.CommandBases;
 
 namespace Tpd.Api.Example.Interface.Controllers
 {
-    public class BaseCrudController<TDto,
-        TItemViewModel,
-        TSearchViewModel,
-        TSerachConditionModel,
-        TCreateModel,
-        TCreateCommand,
-        TUpdateModel,
-        TUpdateCommand> : CoreCrudController<TDto,
-        TItemViewModel,
-        TSearchViewModel,
-        TSerachConditionModel,
-        TCreateModel,
-        TCreateCommand,
-        TUpdateModel,
-        TUpdateCommand>
+    public class BaseCrudController<TDto, TItemViewModel, TSearchViewModel, TSerachConditionModel, TCreateModel, TCreateCommand, TUpdateModel, TUpdateCommand>
+               : CoreCrudController<TDto, TItemViewModel, TSearchViewModel, TSerachConditionModel, TCreateModel, TCreateCommand, TUpdateModel, TUpdateCommand>
         where TDto : DtoBase
         where TCreateCommand : ICommandCreateBase<TDto>
-        where TUpdateCommand : ICommandBase
+        where TUpdateCommand : ICommandUpdateBase<TDto>
     {
         public BaseCrudController(IMapper mapper) :
             base(mapper)

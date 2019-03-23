@@ -10,8 +10,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
     //
     // Summary:
     //     An class provide basic functions for handling a command update data.
-    public class CommandUpdateHandlerBase<TCommand, TEntity, TDto> : CommandHandlerBase<TCommand>, 
-        ICommandUpdateHandlerBase<TCommand, TDto>
+    public class CommandUpdateHandlerBase<TCommand, TEntity, TDto> : CommandHandlerBase<TCommand> 
         where TCommand : ICommandUpdateBase<TDto>
         where TEntity : DtoBase
         where TDto : DtoBase

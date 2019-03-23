@@ -10,9 +10,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
     //
     // Summary:
     //     An class provide basic functions for handling a command update data.
-    public class CommandDeleteHandlerBase<TCommand, TEntity> :
-        CommandHandlerBase<TCommand>,
-        ICommandDeleteHandlerBase<TCommand>
+    public class CommandDeleteHandlerBase<TCommand, TEntity> : CommandHandlerBase<TCommand>
         where TCommand : ICommandDeleteBase
         where TEntity : DtoBase
     {
@@ -51,7 +49,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         //     The entity will be deleted in database.
         protected virtual TEntity GetDeleteEntity(IRpstBase<TEntity> repository, TCommand command)
         {
-            return repository.GetById(command.Id);
+            return repository.GetById(command.Model);
         }
     }
 }

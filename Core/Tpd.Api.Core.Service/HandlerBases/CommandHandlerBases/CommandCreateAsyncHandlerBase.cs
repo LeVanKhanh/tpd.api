@@ -9,9 +9,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
     //
     // Summary:
     //     An class provide basic functions for handling a command create data.
-    public class CommandCreateAsyncHandlerBase<TCommand, TEntity, TDto> :
-        CommandAsyncHandlerBase<TCommand>,
-        ICommandCreateAsyncHandlerBase<TCommand, TDto>
+    public class CommandCreateAsyncHandlerBase<TCommand, TEntity, TDto> : CommandAsyncHandlerBase<TCommand>
         where TCommand : ICommandCreateBase<TDto>
         where TEntity : DtoBase
         where TDto : DtoBase

@@ -33,7 +33,8 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         {
             var result = new ResultBase<PagedResult<TResultType>>
             {
-                Success = true
+                Success = true,
+                Result = new PagedResult<TResultType>()
             };
 
             IQueryable<TResultType> queryable;

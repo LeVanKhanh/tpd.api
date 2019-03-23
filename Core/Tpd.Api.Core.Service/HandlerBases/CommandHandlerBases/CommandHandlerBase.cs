@@ -10,8 +10,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
     //
     // Summary:
     //     An abstract class provide basic functions for handling a command.
-    public abstract class CommandHandlerBase<TCommand> : HandlerBase<TCommand, int>,
-        ICommandHandlerBase<TCommand>
+    public abstract class CommandHandlerBase<TCommand> : HandlerBase<TCommand, int>, ICommandHandlerBase<TCommand>
         where TCommand : ICommandBase
     {
         public CommandHandlerBase(IUnitOfWorkBase unitOfWork)

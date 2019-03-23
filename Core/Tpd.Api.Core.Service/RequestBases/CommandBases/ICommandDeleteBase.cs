@@ -4,6 +4,6 @@ namespace Tpd.Api.Core.Service.RequestBases.CommandBases
 {
     public interface ICommandDeleteBase : ICommandBase
     {
-         Guid Id { get; set; }
+         Guid Model { get; set; }
     }
 }

@@ -129,7 +129,8 @@ namespace Tpd.Api.Core.DataAccess
         {
             entity.UpdatedAt = DateTime.Now;
             //entity.UpdatedBy = context.UserId;
-            Dbset.Update(entity);
+            Dbset.Attach(entity);
+            _dataContext.Entry(entity).State = EntityState.Modified;
         }
 
         public void BulkAdd(RequestContext context, IList<T> entities)
