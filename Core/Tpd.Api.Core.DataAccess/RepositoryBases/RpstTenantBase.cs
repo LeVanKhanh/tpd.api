@@ -4,6 +4,15 @@ using Tpd.Api.Core.DataTransferObject;
 
 namespace Tpd.Api.Core.DataAccess
 {
+    //
+    // Summary:
+    //     A generic repository is the one that can be used for all the entities.
+    //     This class will provide all basic method for accessing or updating a table of database wich
+    //     implement multi-tenancy
+    // Remarks:
+    //     dataContext: A DbContext and can be used to query and save instances of entities.
+    //     Dbset: A Dbset can be used to query and save instances of TEntity.
+    //     context: The current context you are working on.
     public class RpstTenantBase<T> : RpstBase<T>, IRpstTenantBase<T>
          where T : DtoTenantBase
     {
@@ -13,34 +22,18 @@ namespace Tpd.Api.Core.DataAccess
 
         }
 
-        /// <summary>
-        /// Add an entity
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entity Data</param>
         public override void Add(RequestContext context, T entity)
         {
             entity.TenantId = context.TenantId;
             Add(context, entity);
         }
 
-        /// <summary>
-        ///  Add an entity Async
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entity Data</param>
         public override void AddAsync(RequestContext context, T entity)
         {
             entity.TenantId = context.TenantId;
             AddAsync(context, entity);
         }
 
-        /// <summary>
-        /// Get query for current entity
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="isCheckDeleted">Get items were marked deleted or not</param>
-        /// <returns></returns>
         public IQueryable<T> GetQuery(RequestContext context, bool isCheckDeleted = true)
         {
             var query = Dbset.Where(w => w.TenantId == context.TenantId);

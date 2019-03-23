@@ -8,6 +8,14 @@ using Tpd.Api.Core.DataTransferObject;
 
 namespace Tpd.Api.Core.DataAccess
 {
+    //
+    // Summary:
+    //     A generic repository is the one that can be used for all the entities.
+    //     This class will provide all basic method for accessing or updating a table of database.
+    // Remarks:
+    //     dataContext: A DbContext and can be used to query and save instances of entities.
+    //     Dbset: A Dbset can be used to query and save instances of TEntity.
+    //     context: The current context you are working on.
     public class RpstBase<T> : IRpstBase<T>
         where T : DtoBase
     {
@@ -19,12 +27,16 @@ namespace Tpd.Api.Core.DataAccess
             _dataContext = dataContext;
             Dbset = dataContext.Set<T>();
         }
-
-        /// <summary>
-        /// Add an entity
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entity Data</param>
+        //
+        // Summary:
+        //     Updates an entity data before update it's state to Microsoft.EntityFrameworkCore.EntityState.Added.
+        //     The entity will be inserted into the database when Microsoft.EntityFrameworkCore.DbContext.SaveChanges
+        //     is called.
+        // Parameters:
+        //     entity:
+        //          The entity to add.
+        //     context:
+        //          The current context you are working on.
         public virtual void Add(RequestContext context, T entity)
         {
             var currentDateTime = DateTime.Now;
@@ -40,12 +52,16 @@ namespace Tpd.Api.Core.DataAccess
 
             Dbset.Add(entity);
         }
-
-        /// <summary>
-        ///  Add an entity Async
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entity Data</param>
+        //
+        // Summary:
+        //     Updates an entity data before update it's state to Microsoft.EntityFrameworkCore.EntityState.Added.
+        //     The entity will be inserted into the database when Microsoft.EntityFrameworkCore.DbContext.SaveChanges
+        //     is called.
+        // Parameters:
+        //     entity:
+        //          The entity to add.
+        //     context:
+        //          The current context you are working on.
         public virtual async void AddAsync(RequestContext context, T entity)
         {
             var currentDateTime = DateTime.Now;
@@ -55,55 +71,39 @@ namespace Tpd.Api.Core.DataAccess
             //entity.UpdatedBy = context.UserId;
             await Dbset.AddAsync(entity);
         }
-
-        /// <summary>
-        /// Add entities
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entities">Entities</param>
-        public void BulkAdd(RequestContext context, IList<T> entities)
-        {
-            _dataContext.BulkInsert(entities);
-        }
-
-        /// <summary>
-        /// Add entities async
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entities</param>
-        public async void BulkAddAsync(RequestContext context, IList<T> entity)
-        {
-            await _dataContext.BulkInsertAsync(entity);
-        }
-
-        /// <summary>
-        /// Delete entity 
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entities</param>
+        //
+        // Summary:
+        //     This function is soft delete an entity.
+        //     Sets value of property IsDeleted of entity to True.
+        //     The entity will be updated in the database when Microsoft.EntityFrameworkCore.DbContext.SaveChanges
+        //     is called.
+        // Parameters:
+        //     entity:
+        //          The entity to delete.
+        //     context:
+        //          The current context you are working on.
         public void Delete(RequestContext context, T entity)
         {
             entity.IsDeleted = true;
             Update(context, entity);
         }
-
-        /// <summary>
-        /// Delete entity by given Id
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="id">Entity Id</param>
+        //
+        // Summary:
+        //     This function is soft delete an entity by it Id.
+        //     Finds an entity will be deleted, then sets value of property IsDeleted of the entity to True.
+        //     The entity will be updated in the database when Microsoft.EntityFrameworkCore.DbContext.SaveChanges
+        //     is called.
+        // Parameters:
+        //     id:
+        //          The Id of an entity to delete.
+        //     context:
+        //          The current context you are working on.
         public void Delete(RequestContext context, Guid id)
         {
             var entity = Dbset.Find(id);
             Delete(context, entity);
         }
-
-        /// <summary>
-        /// Get an entity by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="isCheckDeleted"></param>
-        /// <returns></returns>
+        
         public T GetById(Guid id, bool isCheckDeleted = true)
         {
             var query = Dbset.Where(w => w.Id == id);
@@ -115,11 +115,6 @@ namespace Tpd.Api.Core.DataAccess
             return query.FirstOrDefault();
         }
 
-        /// <summary>
-        /// Get query for current entity
-        /// </summary>
-        /// <param name="isCheckDeleted">Get items were marked deleted or not</param>
-        /// <returns></returns>
         public IQueryable<T> GetQuery(bool isCheckDeleted = true)
         {
             if (isCheckDeleted)
@@ -130,16 +125,21 @@ namespace Tpd.Api.Core.DataAccess
             return Dbset.AsQueryable();
         }
 
-        /// <summary>
-        /// Update an entity
-        /// </summary>
-        /// <param name="context">Current context</param>
-        /// <param name="entity">Entity Data</param>
         public void Update(RequestContext context, T entity)
         {
             entity.UpdatedAt = DateTime.Now;
             //entity.UpdatedBy = context.UserId;
             Dbset.Update(entity);
+        }
+
+        public void BulkAdd(RequestContext context, IList<T> entities)
+        {
+            _dataContext.BulkInsert(entities);
+        }
+
+        public async void BulkAddAsync(RequestContext context, IList<T> entity)
+        {
+            await _dataContext.BulkInsertAsync(entity);
         }
     }
 }

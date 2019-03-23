@@ -1,23 +1,24 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataTransferObject;
 
 namespace Tpd.Api.Core.DataAccess
 {
-    public interface IUnitOfWorkBase
+    //
+    // Summary:
+    //     A abstract class provide fuctions/DbSets to work with database
+    public interface IUnitOfWorkBase : IDisposable
     {
-        /// <summary>
-        /// The function for getting Repository by type of Entity
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <returns></returns>
+        //
+        // Summary:
+        //     A function can be used to get a repository of an entity
+        // Parameters:
+        //     TEntity:
+        //          Type of an entity
         IRpstBase<TEntity> Repository<TEntity>() where TEntity : DtoBase;
-        /// <summary>
-        /// Commit change
-        /// </summary>
+        
         int Commit();
-        /// <summary>
-        /// Commit change async
-        /// </summary>
+        
         Task<int> CommitAsync();
     }
 }

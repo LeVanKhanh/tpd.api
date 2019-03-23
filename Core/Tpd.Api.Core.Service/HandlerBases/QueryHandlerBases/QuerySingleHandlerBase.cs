@@ -6,6 +6,9 @@ using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
+    //
+    // Summary:
+    //     An abstract class provide basic functions for handling a request to get one item.
     public abstract class QuerySingleHandlerBase<TQuery, TResultType> : QueryHandlerBase<TQuery, TResultType>,
         IQuerySingleHandlerBase<TQuery, TResultType>
         where TQuery : IQuerySingleBase
@@ -16,8 +19,16 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         {
 
         }
-
-        protected override IResultBase<TResultType> Handle(TQuery query, RequestContext context)
+        //
+        // Summary:
+        //     This function for Handling a request to get list of items.
+        //     Checks is build command(s) success or not then execute the command(s)
+        // Return:
+        //     Tpd.Api.Core.Service.ResultBases.IResultBase<PagedResult<TResultType>>.
+        //     With this result can be known the request is handled success or not.
+        //     And the result also contain message(s) if gets error(s).
+        //     TResultType: type of item will be get.
+        protected sealed override IResultBase<TResultType> Handle(TQuery query, RequestContext context)
         {
             var result = new ResultBase<TResultType>
             {
@@ -38,7 +49,12 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 
             return result;
         }
-
+        //
+        // Summary:
+        //     Requires derived class to implement this function.
+        //     Derived class will implement this function to build query.
+        // Return:
+        //     System.Boolean is build query success or not.
         protected abstract bool TryBuildQuery(TQuery query, RequestContext context, out IQueryable<TResultType> queryable, out List<string> message);
     }
 }

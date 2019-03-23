@@ -43,6 +43,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Appendices", "Appendices", 
 	ProjectSection(SolutionItems) = preProject
 		Appendices\EFCommands.txt = Appendices\EFCommands.txt
 		Appendices\Readme.txt = Appendices\Readme.txt
+		Appendices\Resources.txt = Appendices\Resources.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tpd.Api.Utility.FileFolder", "Utility\Tpd.Api.Utility.FileFolder\Tpd.Api.Utility.FileFolder.csproj", "{3723CC49-E92C-4D8F-AEC4-1F8269F7287A}"

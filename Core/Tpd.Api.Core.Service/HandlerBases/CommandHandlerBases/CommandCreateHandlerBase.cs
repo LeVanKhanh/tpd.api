@@ -6,6 +6,9 @@ using Tpd.Api.Core.Service.RequestBases.CommandBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
+    //
+    // Summary:
+    //     An class provide basic functions for handling a command create data.
     public class CommandCreateHandlerBase<TCommand, TEntity, TDto> :
         CommandHandlerBase<TCommand>,
         ICommandCreateHandlerBase<TCommand, TDto>
@@ -19,7 +22,11 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         {
             Mapper = mapper;
         }
-
+        //
+        // Summary:
+        //     Tries to build a command to insert an entity into database.
+        // Return:
+        //     System.Boolean is build command success or not.
         protected override bool TryBuildCommand(TCommand command, RequestContext Context, out List<string> messages)
         {
             messages = new List<string>();
@@ -28,7 +35,13 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
             repository.Add(Context, entity);
             return true;
         }
-
+        //
+        // Summary:
+        //     Gets data from command then create an entity.
+        //     By default, this fuction using auto mapper to create entity.
+        //     Derived can override this fuction to implement differnt way to create an entity.
+        // Return:
+        //     TEntity: Tpd.Api.Core.DataTransferObject.DtoBase an entity will be inserted into data base.
         protected TEntity CreateEntity(TCommand command)
         {
             return Mapper.Map<TEntity>(command.Model);

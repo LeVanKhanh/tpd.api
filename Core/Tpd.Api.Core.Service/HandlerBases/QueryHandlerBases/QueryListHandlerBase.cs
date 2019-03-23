@@ -7,6 +7,9 @@ using Tpd.Api.Utility.Linq;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
+    //
+    // Summary:
+    //     An abstract class provide basic functions for handling a request to get list of items.
     public abstract class QueryListHandlerBase<TQuery, TResultType> : QueryHandlerBase<TQuery, PagedResult<TResultType>>,
         IQueryListHandlerBase<TQuery, TResultType>
         where TQuery : IQueryListBase
@@ -15,8 +18,18 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
             : base(unitOfWork)
         {
         }
-
-        protected override IResultBase<PagedResult<TResultType>> Handle(TQuery query, RequestContext context)
+        //
+        // Summary:
+        //     This function for Handling a request to get list of items.
+        //     Checks is build command(s) success or not then execute the command(s)
+        // Return:
+        //     Tpd.Api.Core.Service.ResultBases.IResultBase<PagedResult<TResultType>>.
+        //     With this result can be known the request is handled success or not.
+        //     And the result also contain message(s) if gets error(s).
+        //     TResultType: type of item will be get list.
+        //     Tpd.Api.Core.Service.ResultBases.PagedResult<T> will provide information about the list as list items, 
+        //     total items.
+        protected sealed override IResultBase<PagedResult<TResultType>> Handle(TQuery query, RequestContext context)
         {
             var result = new ResultBase<PagedResult<TResultType>>
             {
@@ -52,7 +65,12 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 
             return result;
         }
-
+        //
+        // Summary:
+        //     Requires derived class to implement this function.
+        //     Derived class will implement this function to build query.
+        // Return:
+        //     System.Boolean is build query success or not.
         protected abstract bool TryBuildQuery(TQuery query, out IQueryable<TResultType> queryable, out List<string> message);
     }
 }

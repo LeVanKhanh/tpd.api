@@ -1,3 +1,20 @@
+============= Appying =============
+
+0. .Net Core 2.2
+1. Swagger
+2. DependencyInjection
+3. Elmah
+4. SignalR
+5. CQRS
+6. EFCore
+7. Fluent API
+8. Repository/ Unit of Work
+9. SignalR
+10. Bulk Extension
+11. Timer
+
+===================================================
+
 ============= How To Run =============
 
 1. Set Tpd.Api.Example.Interface as start up project.
@@ -25,21 +42,3 @@
 9. Example:		Example for real implementation.
 
 ==================================================
-
-============= Appying =============
-
-0. .Net Core 2.2
-1. Swagger
-2. DependencyInjection
-3. Elmah
-4. SignalR
-5. CQRS
-6. EFCore
-7. Fluent API
-8. Repository/ Unit of Work
-9. SignalR
-10. Bulk Extension
-11. Timer
-
-===================================================
-

@@ -5,6 +5,9 @@ using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases
 {
+    //
+    // Summary:
+    //     An abstract class provide basic functions for handling a request.
     public abstract class HandlerBase<TRequest, TResultType>
         where TRequest: IRequestBase
     {
@@ -14,9 +17,15 @@ namespace Tpd.Api.Core.Service.HandlerBases
         {
             UnitOfWork = unitOfWork;
         }
-
+        //
+        // Summary:
+        //     A function for Handling a request.
+        //     Gets request context, checks the request is valid or not, then access or update DB.
+        // Parameters:
+        //     request: Tpd.Api.Core.Service.RequestBases.IRequestBase the request will be handled.
         public IResultBase<TResultType> Handle(TRequest request)
         {
+            //Gets request context
             var Context = new RequestContext
             {
                 TenantId = request.Context.TenantId,
@@ -25,6 +34,7 @@ namespace Tpd.Api.Core.Service.HandlerBases
 
             List<string> messages;
 
+            // Checks the request is valid or not
             if (IsValidAll(request, out messages))
             {
                 return Handle(request, Context);
@@ -38,15 +48,22 @@ namespace Tpd.Api.Core.Service.HandlerBases
                 };
             }
         }
-
-        protected abstract IResultBase<TResultType> Handle(TRequest command, RequestContext Context);
-
-        /// <summary>
-        /// The function for check command validation and handler validation
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        //
+        // Summary:
+        //     Requires derived class to implement this function.
+        //     This function is the special handle a quest.
+        // Return:
+        //     Tpd.Api.Core.Service.ResultBases.IResultBase<T>.
+        //     With this result can be known the request is handled success or not.
+        //     And the result also contain message(s) if gets error(s).
+        //     TResultType: Type of and object that the request require to response.
+        protected abstract IResultBase<TResultType> Handle(TRequest request, RequestContext Context);
+        //
+        // Summary:
+        //     The function for request validation and handler validation.
+        //     This function is base function for get the result that is the data of request valid or not.
+        // Return:
+        //     System.Boolean is request valid
         protected bool IsValidAll(TRequest request, out List<string> message)
         {
             if (!request.IsValid())
@@ -57,13 +74,12 @@ namespace Tpd.Api.Core.Service.HandlerBases
 
             return IsValid(request, out message);
         }
-
-        /// <summary>
-        /// Function for logic validation
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
+        //
+        // Summary:
+        //     This function for derived class to implement to check the data of request is valid not not.
+        //     Use this fuction in case need to read database for checking.
+        // Return:
+        //     System.Boolean is request valid
         protected virtual bool IsValid(TRequest query, out List<string> message)
         {
             message = new List<string> { };

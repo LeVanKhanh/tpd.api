@@ -1,0 +1,43 @@
+Create a web API with ASP.NET Core MVC
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio
+
+Getting Started with Entity Framework Core
+https://docs.microsoft.com/en-us/ef/core/get-started/
+
+Clean Architecture with ASP.NET Core
+https://www.youtube.com/watch?v=_lwCVE_XgqI
+
+Command and Query Responsibility Segregation (CQRS) pattern
+https://docs.microsoft.com/en-us/azure/architecture/patterns/cqrs
+
+Best Practices:
+https://code-maze.com/aspnetcore-webapi-best-practices/
+https://code-maze.com/top-rest-api-best-practices/
+
+Global Error Handling in ASP.NET Core Web API
+https://code-maze.com/global-error-handling-aspnetcore/
+
+Implementing Action Filters in ASP.NET Core
+https://code-maze.com/action-filters-aspnetcore/
+
+Dependency injection in ASP.NET Core
+https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-2.2
+
+Get started with Swashbuckle and ASP.NET Core
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio
+
+ElmahCore - Log exception
+https://www.nuget.org/packages/ElmahCore/#
+
+.NET Design Patterns
+https://www.dofactory.com/net/design-patterns
+
+SOLID principles
+https://www.c-sharpcorner.com/UploadFile/damubetha/solid-principles-in-C-Sharp/
+
+POCO
+https://www.c-sharpcorner.com/UploadFile/5d065a/poco-classes-in-entity-framework/
+
+Fluent API
+https://docs.microsoft.com/en-us/ef/core/modeling/relationships
+http://www.entityframeworktutorial.net/efcore/fluent-api-in-entity-framework-core.aspx

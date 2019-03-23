@@ -7,6 +7,9 @@ using Tpd.Api.Core.Share;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
+    //
+    // Summary:
+    //     An class provide basic functions for handling a command update data.
     public class CommandDeleteHandlerBase<TCommand, TEntity> :
         CommandHandlerBase<TCommand>,
         ICommandDeleteHandlerBase<TCommand>
@@ -19,7 +22,11 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         {
             Mapper = mapper;
         }
-
+        //
+        // Summary:
+        //     Tries to build a command to delete an entity in database.
+        // Return:
+        //     System.Boolean is build command success or not.
         protected override bool TryBuildCommand(TCommand command, RequestContext Context, out List<string> messages)
         {
             messages = new List<string>();
@@ -37,7 +44,11 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
             repository.Delete(Context, deleteEntity);
             return true;
         }
-
+        //
+        // Summary:
+        //     Get an entity from database.
+        // Return:
+        //     The entity will be deleted in database.
         protected virtual TEntity GetDeleteEntity(IRpstBase<TEntity> repository, TCommand command)
         {
             return repository.GetById(command.Id);
