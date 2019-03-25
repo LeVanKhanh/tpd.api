@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Tpd.Api.DataTransferObject;
 using Tpd.Api.Example.DataAccess.UnitOfWork;
-using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties;
-using Tpd.Api.Example.Service.ServiceResultModels;
+using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueries;
 
 namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQueryHandlers
 {
-    public class MasterDataCategoryGetListHandler : QueryListHandler<MasterDataCategoryGetListQuery, SrmMasterDataCategory>
+    public class MasterDataCategoryGetListHandler : QueryListHandler<MasterDataCategoryGetListQuery, DtoMasterDataCategory>
     {
         public MasterDataCategoryGetListHandler(IUnitOfWork unitOfWork)
            : base(unitOfWork)
@@ -14,7 +14,7 @@ namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQuery
 
         }
 
-        protected override bool TryBuildQuery(MasterDataCategoryGetListQuery query, out IQueryable<SrmMasterDataCategory> queryable, out List<string> message)
+        protected override bool TryBuildQuery(MasterDataCategoryGetListQuery query, out IQueryable<DtoMasterDataCategory> queryable, out List<string> message)
         {
             var dataQuery = UnitOfWork.MasterDataCategory.GetQuery();
 
@@ -28,7 +28,7 @@ namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQuery
                 dataQuery = dataQuery.Where(w => w.Description.Contains(query.Description));
             }
 
-            queryable = dataQuery.Select(s => new SrmMasterDataCategory
+            queryable = dataQuery.Select(s => new DtoMasterDataCategory
             {
                 Id = s.Id,
                 Name = s.Name,

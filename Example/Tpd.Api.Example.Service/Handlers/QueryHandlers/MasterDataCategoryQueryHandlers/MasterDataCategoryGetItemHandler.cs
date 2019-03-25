@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Tpd.Api.Core.DataAccess;
+using Tpd.Api.Core.Service.RequestBases.QueryBases;
+using Tpd.Api.DataTransferObject;
 using Tpd.Api.Example.DataAccess.UnitOfWork;
-using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties;
-using Tpd.Api.Example.Service.ServiceResultModels;
 
 namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQueryHandlers
 {
-    public class MasterDataCategoryGetItemHandler : QuerySingleHandler<MasterDataCategoryGetItemQuery, SrmMasterDataCategory>
+    public class MasterDataCategoryGetItemHandler : QuerySingleHandler<QueryByIdBase, DtoMasterDataCategory>
     {
         public MasterDataCategoryGetItemHandler(IUnitOfWork unitOfWork)
            : base(unitOfWork)
@@ -15,12 +15,12 @@ namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQuery
 
         }
 
-        protected override bool TryBuildQuery(MasterDataCategoryGetItemQuery query, RequestContext context,
-            out IQueryable<SrmMasterDataCategory> queryable, out List<string> message)
+        protected override bool TryBuildQuery(QueryByIdBase query, RequestContext context,
+            out IQueryable<DtoMasterDataCategory> queryable, out List<string> message)
         {
             queryable = UnitOfWork.MasterDataCategory.GetQuery()
                 .Where(w => w.Id == query.Id)
-                .Select(s => new SrmMasterDataCategory
+                .Select(s => new DtoMasterDataCategory
                 {
                     Description = s.Description,
                     CreatedAt = s.CreatedAt,

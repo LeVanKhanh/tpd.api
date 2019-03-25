@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Tpd.Api.Interface.Models.MasterDataCategoryModels;
-using Tpd.Api.Example.Service.ServiceResultModels;
 
-namespace Tpd.Api.Interface.AutoMapperProfiles
+namespace Tpd.Api.Example.Interface.AutoMapperProfiles
 {
     public class DomainToViewModel: Profile
     {
@@ -13,7 +11,7 @@ namespace Tpd.Api.Interface.AutoMapperProfiles
         /// </summary>
         public DomainToViewModel()
         {
-            CreateMap<SrmMasterDataCategory, MasterDataCategoryViewModel>();
+            
         }
     }
 }

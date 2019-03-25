@@ -2,9 +2,9 @@
 using Tpd.Api.Core.Interface;
 using Tpd.Api.Core.Service.RequestBases;
 using Tpd.Api.DataTransferObject;
-using Tpd.Api.Interface.Models.MasterDataCategoryModels;
+using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
 
-namespace Tpd.Api.Interface.AutoMapperProfiles
+namespace Tpd.Api.Example.Interface.AutoMapperProfiles
 {
     public class ViewModelToDomain: Profile
     {

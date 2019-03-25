@@ -1,23 +1,19 @@
 ﻿using AutoMapper;
 using Tpd.Api.Core.Interface;
-using Tpd.Api.Interface.Models.MasterDataCategoryModels;
+using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
 using Tpd.Api.Example.Service.Requests.Commands.MasterDataCategoryCommands;
-using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties;
+using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueries;
 using System;
 
-namespace Tpd.Api.Interface.AutoMapperProfiles
+namespace Tpd.Api.Example.Interface.AutoMapperProfiles
 {
-    public class RequestModelToCommand:Profile
+    public class ClientRequestModelToServiceRequest:Profile
     {
-        /// <summary>
-        /// Configure Auto Mapping
-        /// Source: Request Model
-        /// Destination: Command/ Query
-        /// </summary>
-        public RequestModelToCommand()
+        public ClientRequestModelToServiceRequest()
         {
             CreateMap<RequestModelBase<MasterDataCategoryCreateModel>, MasterDataCategoryCreateCommand>();
             CreateMap<RequestModelBase<MasterDataCategoryUpdateModel>, MasterDataCategoryUpdateCommand>();
+            CreateMap<MasterDataCategorySearchConditionModel, MasterDataCategoryGetListQuery>();
             CreateMap<RequestModelBase<Guid>, MasterDataCategoryDeleteCommand>();
             CreateMap<RequestModelBase<Guid>, MasterDataCategoryGetItemQuery>();
         }

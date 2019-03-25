@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Tpd.Api.Core.DataTransferObject;
 
 namespace Tpd.Api.Example.Interface.Models.MasterDataCategoryModels
 {
-    public class MasterDataCategoryCreateModel
+    public class MasterDataCategorySearchConditionModel : DtoPagingCondition
     {
-        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
     }

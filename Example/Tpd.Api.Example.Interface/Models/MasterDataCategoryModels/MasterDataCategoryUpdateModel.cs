@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tpd.Api.Interface.Models.MasterDataCategoryModels
+namespace Tpd.Api.Example.Interface.Models.MasterDataCategoryModels
 {
     public class MasterDataCategoryUpdateModel
     {

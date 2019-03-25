@@ -1,7 +1,7 @@
 ﻿using Tpd.Api.Core.Service.RequestBases.QueryBases;
 using System;
 
-namespace Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueties
+namespace Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueries
 {
     public class MasterDataCategoryGetItemQuery: QuerySingleBase
     {
