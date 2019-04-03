@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.DataTransferObject;
 using Tpd.Api.Example.DataAccess.UnitOfWork;
@@ -6,15 +7,15 @@ using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueries;
 
 namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQueryHandlers
 {
-    public class MasterDataCategoryGetListHandler : QueryListHandler<MasterDataCategoryGetListQuery, DtoMasterDataCategory>
+    public class MasterDataCategoryGetListHandlerAsync : QueryListHandlerAsync<MasterDataCategoryGetListQuery, DtoMasterDataCategory>
     {
-        public MasterDataCategoryGetListHandler(IUnitOfWork unitOfWork)
+        public MasterDataCategoryGetListHandlerAsync(IUnitOfWork unitOfWork)
            : base(unitOfWork)
         {
 
         }
 
-        protected override IQueryable<DtoMasterDataCategory> BuildQuery(MasterDataCategoryGetListQuery query, RequestContext context)
+        protected override async Task<IQueryable<DtoMasterDataCategory>> BuildQueryAsync(MasterDataCategoryGetListQuery query, RequestContext context)
         {
             var dataQuery = UnitOfWork.MasterDataCategory.GetQuery();
 

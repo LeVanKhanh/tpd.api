@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.Database;
 using Tpd.Api.Core.DataTransferObject;
 
@@ -62,7 +63,7 @@ namespace Tpd.Api.Core.DataAccess
         //          The entity to add.
         //     context:
         //          The current context you are working on.
-        public virtual async void AddAsync(RequestContext context, T entity)
+        public virtual async Task AddAsync(RequestContext context, T entity)
         {
             var currentDateTime = DateTime.Now;
             entity.CreatedAt = currentDateTime;

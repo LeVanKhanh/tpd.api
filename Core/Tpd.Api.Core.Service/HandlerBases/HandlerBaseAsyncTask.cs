@@ -1,19 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases;
 using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases
 {
-    //
-    // Summary:
-    //     An abstract class provide basic functions for handling a request.
-    public abstract class HandlerBase<TRequest, TResultType>
-        where TRequest: IRequestBase
+    public abstract class HandlerBaseAsyncTask<TRequest, TResultType>
+        where TRequest : IRequestBase
     {
         protected readonly IUnitOfWorkBase UnitOfWork;
 
-        public HandlerBase(IUnitOfWorkBase unitOfWork)
+        public HandlerBaseAsyncTask(IUnitOfWorkBase unitOfWork)
         {
             UnitOfWork = unitOfWork;
         }
@@ -23,7 +20,7 @@ namespace Tpd.Api.Core.Service.HandlerBases
         //     Gets request context, checks the request is valid or not, then access or update DB.
         // Parameters:
         //     request: Tpd.Api.Core.Service.RequestBases.IRequestBase the request will be handled.
-        public IResultBase<TResultType> Handle(TRequest request)
+        public async Task<IResultBase<TResultType>> HandleAsyncTask(TRequest request)
         {
             //Gets request context
             var Context = new RequestContext
@@ -33,9 +30,9 @@ namespace Tpd.Api.Core.Service.HandlerBases
             };
 
             // Checks the request is valid or not
-            if (IsValidAll(request))
+            if (await IsValidAllAsync(request))
             {
-                return Handle(request, Context);
+                return await HandleAsync(request, Context);
             }
             else
             {
@@ -55,20 +52,20 @@ namespace Tpd.Api.Core.Service.HandlerBases
         //     With this result can be known the request is handled success or not.
         //     And the result also contain message(s) if gets error(s).
         //     TResultType: Type of and object that the request require to response.
-        protected abstract IResultBase<TResultType> Handle(TRequest request, RequestContext Context);
+        protected abstract Task<IResultBase<TResultType>> HandleAsync(TRequest request, RequestContext Context);
         //
         // Summary:
         //     The function for request validation and handler validation.
         //     This function is base function for get the result that is the data of request valid or not.
         // Return:
         //     System.Boolean is request valid
-        protected bool IsValidAll(TRequest request)
+        protected async Task<bool> IsValidAllAsync(TRequest request)
         {
-            if (!request.IsValid())
+            if (request.IsValid())
             {
-                return false;
+                return await IsValidAsync(request);
             }
-            return IsValid(request);
+            return false;
         }
         //
         // Summary:
@@ -76,9 +73,8 @@ namespace Tpd.Api.Core.Service.HandlerBases
         //     Use this fuction in case need to read database for checking.
         // Return:
         //     System.Boolean is request valid
-        protected virtual bool IsValid(TRequest query)
+        protected virtual async Task<bool> IsValidAsync(TRequest query)
         {
-            query.Messages = new List<string> { };
             return true;
         }
     }

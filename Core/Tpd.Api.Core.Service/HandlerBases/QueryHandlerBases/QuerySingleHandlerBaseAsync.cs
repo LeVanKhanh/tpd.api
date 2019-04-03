@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;
 using Tpd.Api.Core.Service.ResultBases;
@@ -8,12 +10,12 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
     //
     // Summary:
     //     An abstract class provide basic functions for handling a request to get one item.
-    public abstract class QuerySingleHandlerBase<TQuery, TResultType> : QueryHandlerBase<TQuery, TResultType>,
-        IQuerySingleHandlerBase<TQuery, TResultType>
+    public abstract class QuerySingleHandlerBaseAsync<TQuery, TResultType> : QueryHandlerBaseAsync<TQuery, TResultType>,
+        IQuerySingleHandlerBaseAsync<TQuery, TResultType>
         where TQuery : IQuerySingleBase
         where TResultType : new()
     {
-        public QuerySingleHandlerBase(IUnitOfWorkBase unitOfWork)
+        public QuerySingleHandlerBaseAsync(IUnitOfWorkBase unitOfWork)
             : base(unitOfWork)
         {
 
@@ -27,14 +29,14 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         //     With this result can be known the request is handled success or not.
         //     And the result also contain message(s) if gets error(s).
         //     TResultType: type of item will be get.
-        protected sealed override IResultBase<TResultType> Handle(TQuery query, RequestContext context)
+        protected sealed async override Task<IResultBase<TResultType>> HandleAsync(TQuery query, RequestContext context)
         {
             var result = new ResultBase<TResultType>
             {
                 Success = true
             };
 
-            var queryable= BuildQuery(query, context);
+            var queryable = await BuildQueryAsync(query, context);
 
             if (queryable == null)
             {
@@ -43,7 +45,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
                 return result;
             }
 
-            result.Result = queryable.FirstOrDefault();
+            result.Result = await queryable.FirstOrDefaultAsync();
 
             return result;
         }
@@ -53,6 +55,6 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         //     Derived class will implement this function to build query.
         // Return:
         //     System.Boolean is build query success or not.
-        protected abstract IQueryable<TResultType> BuildQuery(TQuery query, RequestContext context);
+        protected abstract Task<IQueryable<TResultType>> BuildQueryAsync(TQuery query, RequestContext context);
     }
 }

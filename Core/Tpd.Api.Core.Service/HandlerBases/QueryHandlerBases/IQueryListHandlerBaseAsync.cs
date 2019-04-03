@@ -3,9 +3,9 @@ using Tpd.Api.Core.Service.ResultBases;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
-    public interface IQueryHandlerBase<TQuery, TResultType>
-        where TQuery : IQueryBase
+    public interface IQueryListHandlerBaseAsync<TQuery, TResultType> : IQueryHandlerBaseAsync<TQuery, PagedResult<TResultType>>
+        where TQuery : IQueryListBase
     {
-        IResultBase<TResultType> Handle(TQuery query);
+
     }
 }

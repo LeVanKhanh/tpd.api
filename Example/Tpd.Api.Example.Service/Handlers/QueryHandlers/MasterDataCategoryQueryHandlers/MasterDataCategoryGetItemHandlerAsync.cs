@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;
 using Tpd.Api.DataTransferObject;
@@ -7,15 +7,15 @@ using Tpd.Api.Example.DataAccess.UnitOfWork;
 
 namespace Tpd.Api.Example.Service.Handlers.QueryHandlers.MasterDataCategoryQueryHandlers
 {
-    public class MasterDataCategoryGetItemHandler : QuerySingleHandler<QueryByIdBase, DtoMasterDataCategory>
+    public class MasterDataCategoryGetItemHandlerAsync : QuerySingleHandlerAsync<QueryByIdBase, DtoMasterDataCategory>
     {
-        public MasterDataCategoryGetItemHandler(IUnitOfWork unitOfWork)
+        public MasterDataCategoryGetItemHandlerAsync(IUnitOfWork unitOfWork)
            : base(unitOfWork)
         {
 
         }
 
-        protected override IQueryable<DtoMasterDataCategory> BuildQuery(QueryByIdBase query, RequestContext context)
+        protected override async Task<IQueryable<DtoMasterDataCategory>> BuildQueryAsync(QueryByIdBase query, RequestContext context)
         {
             return UnitOfWork.MasterDataCategory.GetQuery()
                 .Where(w => w.Id == query.Id)

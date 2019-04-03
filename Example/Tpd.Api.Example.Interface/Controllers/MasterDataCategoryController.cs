@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Tpd.Api.Core.Interface;
 using Tpd.Api.DataTransferObject;
 using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
 using Tpd.Api.Example.Service.Requests.Commands.MasterDataCategoryCommands;
@@ -10,7 +12,7 @@ namespace Tpd.Api.Example.Interface.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class MasterDataCategoryController : BaseCrudController<DtoMasterDataCategory,
-        MasterDataCategoryViewModel, 
+        MasterDataCategoryViewModel,
         MasterDataCategorySearchConditionModel,
         MasterDataCategoryCreateModel, MasterDataCategoryCreateCommand,
         MasterDataCategoryUpdateModel, MasterDataCategoryUpdateCommand,

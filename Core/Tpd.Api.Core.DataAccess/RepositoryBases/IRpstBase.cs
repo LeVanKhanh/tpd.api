@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Tpd.Api.Core.DataAccess
 {
@@ -36,8 +37,7 @@ namespace Tpd.Api.Core.DataAccess
         //          The entity to add.
         //     context:
         //          The current context you are working on.
-        void AddAsync(RequestContext context, T entity);
-      
+        Task AddAsync(RequestContext context, T entity);
         //
         // Summary:
         //     This function is soft delete an entity.

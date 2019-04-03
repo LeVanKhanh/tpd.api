@@ -54,9 +54,10 @@ namespace Tpd.Api.Interface
             //Implement Swagger
             app.UseSwagger();
             app.UseHttpsRedirection();
-            app.UseMvc();
             // Configure Cors Origins
             app.UseCorsOrigins();
+
+            app.UseMvc();
             // Implement SignalR
             app.UseSignalR();
         }

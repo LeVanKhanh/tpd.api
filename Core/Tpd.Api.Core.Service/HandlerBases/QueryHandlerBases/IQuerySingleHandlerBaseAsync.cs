@@ -2,8 +2,9 @@
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
-    public interface IQuerySingleHandlerBase<TQuery, TResultType> : IQueryHandlerBase<TQuery, TResultType>
+    public interface IQuerySingleHandlerBaseAsync<TQuery, TResultType> : IQueryHandlerBaseAsync<TQuery, TResultType>
         where TQuery : IQuerySingleBase
     {
+
     }
 }

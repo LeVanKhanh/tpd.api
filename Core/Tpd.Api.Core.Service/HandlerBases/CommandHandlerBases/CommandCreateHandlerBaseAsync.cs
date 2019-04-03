@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.DataTransferObject;
 using Tpd.Api.Core.Service.RequestBases.CommandBases;
@@ -8,16 +8,13 @@ using Tpd.Api.Core.Share;
 
 namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
 {
-    //
-    // Summary:
-    //     An class provide basic functions for handling a command create data.
-    public class CommandCreateHandlerBase<TCommand, TEntity, TDto> : CommandHandlerBase<TCommand>
+    public class CommandCreateHandlerBaseAsync<TCommand, TEntity, TDto> : CommandHandlerBaseAsyncTask<TCommand>
         where TCommand : ICommandCreateBase<TDto>
         where TEntity : DtoBase
         where TDto : DtoBase
     {
         protected readonly IMapper Mapper;
-        public CommandCreateHandlerBase(IUnitOfWorkBase unitOfWork, IMapper mapper)
+        public CommandCreateHandlerBaseAsync(IUnitOfWorkBase unitOfWork, IMapper mapper)
             : base(unitOfWork)
         {
             Mapper = mapper;
@@ -27,11 +24,10 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         //     Tries to build a command to insert an entity into database.
         // Return:
         //     System.Boolean is build command success or not.
-        protected override bool TryBuildCommand(TCommand command, RequestContext Context, out List<string> messages)
+        protected override async Task<bool> TryBuildCommandAsync(TCommand command, RequestContext Context)
         {
-            messages = new List<string>();
             var repository = UnitOfWork.Repository<TEntity>();
-            var entity = CreateEntity(command);
+            var entity = await CreateEntityAsync(command);
             repository.Add(Context, entity);
             return true;
         }
@@ -42,7 +38,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         //     Derived can override this fuction to implement differnt way to create an entity.
         // Return:
         //     TEntity: Tpd.Api.Core.DataTransferObject.DtoBase an entity will be inserted into data base.
-        protected virtual TEntity CreateEntity(TCommand command)
+        protected virtual async Task<TEntity> CreateEntityAsync(TCommand command)
         {
             return Mapper.Map<TEntity>(command.Model);
         }
@@ -51,14 +47,13 @@ namespace Tpd.Api.Core.Service.HandlerBases.CommandHandlerBases
         //     Checks the create command is valid or not.
         // Return:
         //     System.Boolean is command valid
-        protected override bool IsValid(TCommand command)
+        protected override async Task<bool> IsValidAsync(TCommand command)
         {
             if (Exists(command))
             {
                 command.Messages.Add(Constants.CommonMessages.THE_ITEM_EXIST);
                 return false;
             }
-
             return true;
         }
         //

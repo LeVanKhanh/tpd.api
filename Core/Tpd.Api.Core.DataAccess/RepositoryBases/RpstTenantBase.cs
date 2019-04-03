@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.Database;
 using Tpd.Api.Core.DataTransferObject;
 
@@ -28,10 +29,10 @@ namespace Tpd.Api.Core.DataAccess
             Add(context, entity);
         }
 
-        public override void AddAsync(RequestContext context, T entity)
+        public async override Task AddAsync(RequestContext context, T entity)
         {
             entity.TenantId = context.TenantId;
-            AddAsync(context, entity);
+            await AddAsync(context, entity);
         }
 
         public IQueryable<T> GetQuery(RequestContext context, bool isCheckDeleted = true)

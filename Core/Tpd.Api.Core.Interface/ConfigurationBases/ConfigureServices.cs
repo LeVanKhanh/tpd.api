@@ -85,6 +85,10 @@ namespace Tpd.Api.Core.Interface
             services.RegisterAssemblyPublicNonGenericClasses(assemblyToScan)
               .Where(c => c.Name.EndsWith("Handler"))
               .AsPublicImplementedInterfaces();
+
+            services.RegisterAssemblyPublicNonGenericClasses(assemblyToScan)
+              .Where(c => c.Name.EndsWith("HandlerAsync"))
+              .AsPublicImplementedInterfaces();
         }
     }
 }

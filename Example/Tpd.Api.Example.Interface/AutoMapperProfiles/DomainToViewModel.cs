@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Tpd.Api.DataTransferObject;
+using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
 
 namespace Tpd.Api.Example.Interface.AutoMapperProfiles
 {
-    public class DomainToViewModel: Profile
+    public class DomainToViewModel : Profile
     {
         /// <summary>
         /// Config Auto Mapping
@@ -11,7 +13,7 @@ namespace Tpd.Api.Example.Interface.AutoMapperProfiles
         /// </summary>
         public DomainToViewModel()
         {
-            
+            CreateMap<DtoMasterDataCategory, MasterDataCategoryViewModel>();
         }
     }
 }

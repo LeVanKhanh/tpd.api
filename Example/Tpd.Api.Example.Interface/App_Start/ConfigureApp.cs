@@ -13,10 +13,7 @@ namespace Tpd.Api.Interface.App_Start
         {
             app.UseCors(builder =>
             {
-                builder.WithOrigins("https://localhost:44330",
-                    "http://localhost:44361",
-                    "http://localhost:4200",
-                    "http://localhost:92")
+                builder.WithOrigins("http://localhost:4200")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

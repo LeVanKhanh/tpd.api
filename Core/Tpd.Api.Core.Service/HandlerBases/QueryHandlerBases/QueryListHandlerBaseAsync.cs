@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;
 using Tpd.Api.Core.Service.ResultBases;
@@ -6,14 +8,11 @@ using Tpd.Api.Utility.Linq;
 
 namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
 {
-    //
-    // Summary:
-    //     An abstract class provide basic functions for handling a request to get list of items.
-    public abstract class QueryListHandlerBase<TQuery, TResultType> : QueryHandlerBase<TQuery, PagedResult<TResultType>>,
-        IQueryListHandlerBase<TQuery, TResultType>
+    public abstract class QueryListHandlerBaseAsync<TQuery, TResultType> : QueryHandlerBaseAsync<TQuery, PagedResult<TResultType>>,
+        IQueryListHandlerBaseAsync<TQuery, TResultType>
         where TQuery : IQueryListBase
     {
-        public QueryListHandlerBase(IUnitOfWorkBase unitOfWork)
+        public QueryListHandlerBaseAsync(IUnitOfWorkBase unitOfWork)
             : base(unitOfWork)
         {
         }
@@ -28,7 +27,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         //     TResultType: type of item will be get list.
         //     Tpd.Api.Core.Service.ResultBases.PagedResult<T> will provide information about the list as list items, 
         //     total items.
-        protected sealed override IResultBase<PagedResult<TResultType>> Handle(TQuery query, RequestContext context)
+        protected sealed async override Task<IResultBase<PagedResult<TResultType>>> HandleAsync(TQuery query, RequestContext context)
         {
             var result = new ResultBase<PagedResult<TResultType>>
             {
@@ -36,7 +35,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
                 Result = new PagedResult<TResultType>()
             };
 
-            var queryable = BuildQuery(query, context);
+            var queryable = await BuildQueryAsync(query, context);
 
             if (queryable == null)
             {
@@ -60,7 +59,7 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
             }
 
             result.Success = true;
-            result.Result.Items = queryable.ToList();
+            result.Result.Items = await queryable.ToListAsync();
 
             return result;
         }
@@ -70,6 +69,6 @@ namespace Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases
         //     Derived class will implement this function to build query.
         // Return:
         //     System.Boolean is build query success or not.
-        protected abstract IQueryable<TResultType> BuildQuery(TQuery query, RequestContext context);
+        protected abstract Task<IQueryable<TResultType>> BuildQueryAsync(TQuery query, RequestContext context);
     }
 }
