@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="AutoMapperProfiles\" />
+    <Folder Include="Handlers\CommandHandlers\" />
+    <Folder Include="Requests\Commands\" />
+    <Folder Include="ServiceResultModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Tpd.Api.Core.Service\Tpd.Api.Core.Service.csproj" />
+    <ProjectReference Include="..\Tpd.Api.Language.DataAccess\Tpd.Api.Language.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DBConnection": "Server=DESKTOP-6GH7968;Database=Language;User Id=sa;Password=P@ssw0rd;"
+  }
+}

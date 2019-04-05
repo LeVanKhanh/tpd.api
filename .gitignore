@@ -118,3 +118,17 @@
 /Workflow/Tpd.Api.Workflow.Share/obj
 /Utility/Tpd.Api.Utility.SystemDateTime/bin
 /Utility/Tpd.Api.Utility.SystemDateTime/obj
+/Language/Tpd.Api.Language.DataAccess/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.DataAccess/obj
+/Language/Tpd.Api.Language.Database/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.Database/obj/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.Database/obj
+/Language/Tpd.Api.Language.DataTransferObject/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.DataTransferObject/obj
+/Language/Tpd.Api.Language.Interface/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.Interface/obj
+/Language/Tpd.Api.Language.Service/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.Service/obj
+/Language/Tpd.Api.Language.Share/obj
+/Language/Tpd.Api.Language.Share/bin/Debug/netcoreapp2.2
+/Language/Tpd.Api.Language.Database/Migrations
