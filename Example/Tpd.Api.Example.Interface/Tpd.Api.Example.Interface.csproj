@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="connectionstrings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

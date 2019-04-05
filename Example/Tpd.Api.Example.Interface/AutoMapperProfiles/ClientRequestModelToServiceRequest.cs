@@ -4,6 +4,7 @@ using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
 using Tpd.Api.Example.Service.Requests.Commands.MasterDataCategoryCommands;
 using Tpd.Api.Example.Service.Requests.Queries.MasterDataCategoryQueries;
 using System;
+using Tpd.Api.Core.Interface.RequestModelBases;
 
 namespace Tpd.Api.Example.Interface.AutoMapperProfiles
 {

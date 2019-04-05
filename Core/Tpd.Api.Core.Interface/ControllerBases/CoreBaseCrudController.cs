@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Tpd.Api.Core.DataTransferObject;
+using Tpd.Api.Core.Interface.RequestModelBases;
 using Tpd.Api.Core.Service.RequestBases;
 using Tpd.Api.Core.Service.RequestBases.CommandBases;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;
@@ -19,6 +20,7 @@ namespace Tpd.Api.Core.Interface.ControllerBases
         where TUpdateCommand : ICommandUpdateBase<TDto>
         where TDeleteCommand : ICommandDeleteBase
         where TQueryList : IQueryListBase
+
     {
         public CoreBaseCrudController(IMapper mapper) : base(mapper)
         {

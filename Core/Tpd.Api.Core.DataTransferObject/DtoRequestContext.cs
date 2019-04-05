@@ -12,5 +12,7 @@ namespace Tpd.Api.Core.DataTransferObject
 
         public Guid UserId { get; set; }
         public Guid TenantId { get; set; }
+        public string Language { get; set; }
+        public string LocalTimeZone { get; set; }
     }
 }

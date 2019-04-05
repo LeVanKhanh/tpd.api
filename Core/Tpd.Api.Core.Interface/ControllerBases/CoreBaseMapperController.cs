@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Tpd.Api.Core.Interface.RequestModelBases;
 using Tpd.Api.Core.Service.HandlerBases.QueryHandlerBases;
 using Tpd.Api.Core.Service.RequestBases.CommandBases;
 using Tpd.Api.Core.Service.RequestBases.QueryBases;

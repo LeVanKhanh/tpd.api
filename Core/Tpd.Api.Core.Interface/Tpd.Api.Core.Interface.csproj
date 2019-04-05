@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility\Tpd.Api.Utility.Serializer\Tpd.Api.Utility.Serializer.csproj" />
+    <ProjectReference Include="..\..\Utility\Tpd.Api.Utility.SystemDateTime\Tpd.Api.Utility.SystemDateTime.csproj" />
     <ProjectReference Include="..\Tpd.Api.Core.Service\Tpd.Api.Core.Service.csproj" />
   </ItemGroup>
 

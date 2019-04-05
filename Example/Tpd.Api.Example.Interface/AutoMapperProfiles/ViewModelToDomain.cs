@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Tpd.Api.Core.Interface;
+using Tpd.Api.Core.DataAccess;
 using Tpd.Api.Core.Service.RequestBases;
 using Tpd.Api.DataTransferObject;
 using Tpd.Api.Example.Interface.Models.MasterDataCategoryModels;
