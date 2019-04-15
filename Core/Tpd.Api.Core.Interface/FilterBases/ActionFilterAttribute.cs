@@ -30,70 +30,70 @@ namespace Tpd.Api.Core.Interface
 
         private void Globalize(ActionExecutingContext filterContext)
         {
-            var actionArguments = filterContext.ActionArguments;
+            //var actionArguments = filterContext.ActionArguments;
 
-            foreach (var actionArgument in actionArguments)
-            {
-                var argtype = actionArgument.Value.GetType();
+            //foreach (var actionArgument in actionArguments)
+            //{
+            //    var argtype = actionArgument.Value.GetType();
 
-                if (argtype.GetGenericTypeDefinition() == typeof(RequestModelBase<>))
-                {
-                    var context = argtype.GetProperty("RequestContext")
-                                    .GetValue(actionArgument.Value) as RequestContext;
+            //    if (argtype.GetGenericTypeDefinition() == typeof(RequestModelBase<>))
+            //    {
+            //        var context = argtype.GetProperty("RequestContext")
+            //                        .GetValue(actionArgument.Value) as RequestContext;
 
-                    localTimeZone = context.LocalTimeZone;
+            //        localTimeZone = context.LocalTimeZone;
 
-                    var model = argtype.GetProperty("Model").GetValue(actionArgument.Value);
+            //        var model = argtype.GetProperty("Model").GetValue(actionArgument.Value);
 
-                    if (model is IConvertTimeZone)
-                    {
-                        var value = model as IConvertTimeZone;
+            //        if (model is IConvertTimeZone)
+            //        {
+            //            var value = model as IConvertTimeZone;
 
-                        if (value != null)
-                        {
-                            value.ConvertTimeZone(localTimeZone, AppCoreSettings.SystemTimeZone);
-                        }
-                    }
-                }
-            }
+            //            if (value != null)
+            //            {
+            //                value.ConvertTimeZone(localTimeZone, AppCoreSettings.SystemTimeZone);
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void Localize(object obj)
         {
-            if (obj == null)
-            {
-                return;
-            }
+            //if (obj == null)
+            //{
+            //    return;
+            //}
 
-            var objectType = obj.GetType();
+            //var objectType = obj.GetType();
 
-            if (objectType.IsValueType)
-            {
-                return;
-            }
+            //if (objectType.IsValueType)
+            //{
+            //    return;
+            //}
 
-            if (obj is IEnumerable)
-            {
-                var items = (IEnumerable)obj;
-                foreach (var item in items)
-                {
-                    Localize(item);
-                }
-                return;
-            }
+            //if (obj is IEnumerable)
+            //{
+            //    var items = (IEnumerable)obj;
+            //    foreach (var item in items)
+            //    {
+            //        Localize(item);
+            //    }
+            //    return;
+            //}
 
-            if (obj is IConvertTimeZone) {
-                ((IConvertTimeZone)obj).ConvertTimeZone(AppCoreSettings.SystemTimeZone, localTimeZone);
-                return;
-            }
+            //if (obj is IConvertTimeZone) {
+            //    ((IConvertTimeZone)obj).ConvertTimeZone(AppCoreSettings.SystemTimeZone, localTimeZone);
+            //    return;
+            //}
 
-            var properties = objectType.GetProperties();
+            //var properties = objectType.GetProperties();
 
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(obj);
-                Localize(value);
-            }
+            //foreach (var property in properties)
+            //{
+            //    var value = property.GetValue(obj);
+            //    Localize(value);
+            //}
         }
 
         private bool IsModelValid(ActionExecutingContext filterContext)
